@@ -117,11 +117,7 @@ class blueGhost(pygame.sprite.Sprite):
 
 	def validMove(self, x, y):
 		#lower right half of board start
-		if x>636:
-			return 0
-		elif y>633:
-			return 0
-		elif x>536 and y>213 and y<453:
+		if y>633:
 			return 0
 		elif x>476 and x<532 and y>333 and y<453:
 			return 0
@@ -142,8 +138,6 @@ class blueGhost(pygame.sprite.Sprite):
 		elif ((x<= 292 and x>= 237) and (y>= 332 and y <=449)):
 			return 0
 		elif ((x>=237 and x<=355) and (y>=454 and y<=512)):
-			return 0
-		elif ((x<=231) and (y>=214 and y<=452)):
 			return 0
 		elif ((x<=131) and (y>=452 and y<= 514)):
 			return 0
@@ -168,8 +162,6 @@ class blueGhost(pygame.sprite.Sprite):
 		elif ((x>= 237 and x <= 291) and (y<=326 and y>=154)):
 			return 0
 		elif ((x >=237 and x<= 349) and (y>=216 and y <=268)):
-			return 0
-		elif ( x <= 131):
 			return 0
 		elif ((x>=137 and x <=231) and (y<=208 and y>=154)):
 			return 0
@@ -198,6 +190,15 @@ class blueGhost(pygame.sprite.Sprite):
 		elif ((x>=417 and x<=512) and (y>=214 and y<=268)):
 			return 0
 		#right half board end
+		elif ((x>= 644) and (y<= 218 and y >= 64 )):
+			return 0
+		#the side tunnels
+		elif (((x>=-36 and x<= 230)or(x<= 800 and x >= 540)) and ((y>=214 and y<= 325 ) or ((y <= 452 )and y >= 334))):
+			return 0
+		elif ((x>= 640) and (y>= 417 and y <= 660 )):
+			return 0
+		elif ((x<= 131) and (y>= 60 and y<= 215 )):
+			return 0
 		else:
 			return 1
 		
@@ -255,6 +256,11 @@ class Player(pygame.sprite.Sprite):
 		self.image_full = pygame.transform.scale(self.image_full, (int(30),int(30)))
 		self.orig_image = self.image # hold on to original pacman image facing right
 		
+		self.image_right = self.image
+		self.image_left = pygame.transform.rotate(self.orig_image, 180)
+		self.image_up = pygame.transform.rotate(self.orig_image, 90)
+		self.image_down = pygame.transform.rotate(self.orig_image, 270)
+		
 		self.rect = self.image.get_rect()
 		self.rect.x = 396
 		self.rect.y = 393
@@ -265,11 +271,7 @@ class Player(pygame.sprite.Sprite):
 
 	def validMove(self, x, y):
 		#lower right half of board start
-		if x>636:
-			return 0
-		elif y>633:
-			return 0
-		elif x>536 and y>213 and y<453:
+		if y>633:
 			return 0
 		elif x>476 and x<532 and y>333 and y<453:
 			return 0
@@ -290,8 +292,6 @@ class Player(pygame.sprite.Sprite):
 		elif ((x<= 292 and x>= 237) and (y>= 332 and y <=449)):
 			return 0
 		elif ((x>=237 and x<=355) and (y>=454 and y<=512)):
-			return 0
-		elif ((x<=231) and (y>=214 and y<=452)):
 			return 0
 		elif ((x<=131) and (y>=452 and y<= 514)):
 			return 0
@@ -316,8 +316,6 @@ class Player(pygame.sprite.Sprite):
 		elif ((x>= 237 and x <= 291) and (y<=326 and y>=154)):
 			return 0
 		elif ((x >=237 and x<= 349) and (y>=216 and y <=268)):
-			return 0
-		elif ( x <= 131):
 			return 0
 		elif ((x>=137 and x <=231) and (y<=208 and y>=154)):
 			return 0
@@ -346,6 +344,15 @@ class Player(pygame.sprite.Sprite):
 		elif ((x>=417 and x<=512) and (y>=214 and y<=268)):
 			return 0
 		#right half board end
+		elif ((x>= 644) and (y<= 218 and y >= 64 )):
+			return 0
+		#the side tunnels
+		elif (((x>=-36 and x<= 230)or(x<= 800 and x >= 540)) and ((y>=214 and y<= 325 ) or ((y <= 452 )and y >= 334))):
+			return 0
+		elif ((x>= 640) and (y>= 417 and y <= 660 )):
+			return 0
+		elif ((x<= 131) and (y>= 60 and y<= 215 )):
+			return 0
 		else:
 			return 1
 		
@@ -367,6 +374,10 @@ class Player(pygame.sprite.Sprite):
 					self.l = ["pacman",self.rect,4]
 					self.image = self.image_full
 					self.orientation = "full"
+				if (self.rect.x>803):
+					self.rect.x = -36
+					
+					
 			
 		if (keycode == K_LEFT):
 			self.last_key = "left"
@@ -384,6 +395,8 @@ class Player(pygame.sprite.Sprite):
 					self.l = ["pacman",self.rect,4]
 					self.image = self.image_full
 					self.orientation = "full"
+				if (self.rect.x < -32):
+					self.rect.x = 800
 			
 		if (keycode == K_DOWN):
 			self.last_key = "down"

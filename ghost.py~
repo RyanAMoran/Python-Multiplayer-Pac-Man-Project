@@ -122,24 +122,15 @@ class blueGhost(pygame.sprite.Sprite):
 
 	def validMove(self, x, y):
 		#lower right half of board start
-		if x>636:
+		if y>633:
 			return 0
-		elif y>633:
-			return 0
-		elif x>536 and y>213 and y<453:
-			#print "this one"
-			return 0
-		elif x>476 and x<532 and y>333 and y<450:
-			#print "that one"
+		elif x>476 and x<532 and y>333 and y<453:
 			return 0
 		elif x> 416 and x<532 and y>453 and y<513:
-			#print "here"
 			return 0
 		elif (y>453 and y<513 and x>536 and x<636) or (y>481 and y<573 and x>536 and x<596):
-			#"print no here"
 			return 0
 		elif (y>513 and y<573 and x>596):
-			#print "aqui"
 			return 0
 		elif (y>573 and y<633 and x>416 and x<636) or (x<532 and x>476 and y>513 and y<609):
 			return 0
@@ -152,8 +143,6 @@ class blueGhost(pygame.sprite.Sprite):
 		elif ((x<= 292 and x>= 237) and (y>= 332 and y <=449)):
 			return 0
 		elif ((x>=237 and x<=355) and (y>=454 and y<=512)):
-			return 0
-		elif ((x<=231) and (y>=214 and y<=452)):
 			return 0
 		elif ((x<=131) and (y>=452 and y<= 514)):
 			return 0
@@ -178,8 +167,6 @@ class blueGhost(pygame.sprite.Sprite):
 		elif ((x>= 237 and x <= 291) and (y<=326 and y>=154)):
 			return 0
 		elif ((x >=237 and x<= 349) and (y>=216 and y <=268)):
-			return 0
-		elif ( x <= 131):
 			return 0
 		elif ((x>=137 and x <=231) and (y<=208 and y>=154)):
 			return 0
@@ -208,6 +195,15 @@ class blueGhost(pygame.sprite.Sprite):
 		elif ((x>=417 and x<=512) and (y>=214 and y<=268)):
 			return 0
 		#right half board end
+		elif ((x>= 644) and (y<= 218 and y >= 64 )):
+			return 0
+		#the side tunnels
+		elif (((x>=-36 and x<= 230)or(x<= 800 and x >= 540)) and ((y>=214 and y<= 325 ) or ((y <= 452 )and y >= 334))):
+			return 0
+		elif ((x>= 640) and (y>= 417 and y <= 660 )):
+			return 0
+		elif ((x<= 131) and (y>= 60 and y<= 215 )):
+			return 0
 		else:
 			return 1
 		
@@ -670,7 +666,7 @@ class GameSpace:
 if __name__ == '__main__':
 	handler = ConnectionHandler()
 	commandFactory = CommandFactory(handler)
-	reactor.connectTCP('localhost', 32000, commandFactory) #command port number
+	reactor.connectTCP('student02.cse.nd.edu', 8678, commandFactory) #command port number
 	gs = GameSpace(handler)
 	LC = LoopingCall(gs.task)
 	LC.start(1/60)
