@@ -419,8 +419,9 @@ class Player(pygame.sprite.Sprite):
 					self.image = self.image_full
 					self.orientation = "full"
 
-		pd = pickle.dumps(self.l)
-		self.gs.handler.commandConnection.transport.write(pd)
+		if self.gs.blueGhost.automate!=1:
+			pd = pickle.dumps(self.l)
+			self.gs.handler.commandConnection.transport.write(pd)
 		return
 		
 	def tick(self):
