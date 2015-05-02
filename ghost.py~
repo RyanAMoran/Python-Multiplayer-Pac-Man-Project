@@ -34,15 +34,7 @@ class Command(Protocol):
 			if newList[0]=="pacman":
 				gs.player.rect = newList[1]
 				if newList[2]==0:
-					gs.player.image = gs.player.image_right
-				elif newList[2]==1:
-					gs.player.image = gs.player.image_left
-				elif newList[2]==2:
-					gs.player.image=gs.player.image_down
-				elif newList[2]==3:
-					gs.player.image=gs.player.image_up
-				elif newList[2]==4:
-					gs.player.image=gs.player.image_full
+					gs.player.image = gs.player.image
 
 	def connectionMade(self):
 		self.handler.commandConnection=self

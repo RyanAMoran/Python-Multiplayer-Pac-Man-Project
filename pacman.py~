@@ -7,6 +7,7 @@ from twisted.internet import reactor, protocol
 from twisted.internet.defer import DeferredQueue
 from twisted.internet.defer import Deferred
 from twisted.internet.task import LoopingCall
+import cPickle as pickle
 
 
 ####networking stuff
@@ -23,8 +24,23 @@ class Command(LineReceiver):
         self.handler = handler
 
     def connectionMade(self):
+	gs.blueGhost.automate=0
 	self.handler.commandConnection = self
-	print "here"
+	pd = pickle.dumps(gs.blueGhost.rect)
+	self.handler.commandConnection.transport.write(pd)
+
+    def dataReceived(self, data):
+	newList = pickle.loads(data)
+	if newList[0]=="blueGhost":
+		gs.blueGhost.rect = newList[1]
+		if newList[2]==1:
+			gs.blueGhost.image = gs.blueGhost.image_left
+		elif newList[2]==0:
+			gs.blueGhost.image=gs.blueGhost.image_right
+		elif newList[2]==2:
+			gs.blueGhost.image=gs.blueGhost.image_down
+		elif newList[2]==3:
+			gs.blueGhost.image=gs.blueGhost.image_up
 
 class CommandFactory(Factory):
 
@@ -80,22 +96,24 @@ class blueGhost(pygame.sprite.Sprite):
 		FILE3 = "images/blue_ghost_left.png"
 		FILE4 = "images/blue_ghost_right.png"
 		self.image = pygame.image.load(FILE1) #filled in pacman image
-		self.image = pygame.transform.scale(self.image, (int(36),int(36)))
+		self.image = pygame.transform.scale(self.image, (int(30),int(30)))
 		self.image_down = self.image # hold on to original ghost image facing down
 		self.image_up = pygame.image.load(FILE2)
 		self.image_right = pygame.image.load(FILE4)
 		self.image_left = pygame.image.load(FILE3)
-		self.image_right = pygame.transform.scale(self.image_right, (int(37),int(37)))
-		self.image_up = pygame.transform.scale(self.image_up, (int(37),int(37)))
-		self.image_left = pygame.transform.scale(self.image_left, (int(37),int(37)))
+		self.image_right = pygame.transform.scale(self.image_right, (int(30),int(30)))
+		self.image_up = pygame.transform.scale(self.image_up, (int(30),int(30)))
+		self.image_left = pygame.transform.scale(self.image_left, (int(30),int(30)))
 		
 		self.rect = self.image.get_rect()
-		self.rect.x = 370
-		self.rect.y = 350
+		self.rect.x = 372
+		self.rect.y = 353
 		self.tempRectX = self.rect.x
 		self.tempRectY = self.rect.y
 		self.direction = "none"
 		self.count = 0
+
+		self.automate=1
 
 	def validMove(self, x, y):
 		#lower right half of board start
@@ -195,33 +213,34 @@ class blueGhost(pygame.sprite.Sprite):
 			self.count=0
 		if self.rect.x >296 and self.rect.x<380 and self.rect.y < 395 and self.rect.y>272:
 			self.image = self.image_right
-			self.rect.x = self.rect.x+1
+			self.rect.x = self.rect.x+4
 		if self.rect.x>365 and self.rect.x<416 and self.rect.y < 395 and self.rect.y>272:
 			self.image = self.image_up
-			self.rect.y= self.rect.y-1
+			self.rect.y= self.rect.y-4
 		else:
 			if (self.count==0 and randomNumber == 0 and self.validMove(self.rect.x-1,self.rect.y)) or (self.count!=0 and self.direction=="left" and self.validMove(self.rect.x-1,self.rect.y)):
 				self.image = self.image_left
-				self.rect.x = self.rect.x-1
+				self.rect.x = self.rect.x-4
 				self.direction = "left"
 			elif (self.count==0 and randomNumber == 1 and self.validMove(self.rect.x+1,self.rect.y))or (self.count!=0 and self.direction=="right"and self.validMove(self.rect.x+1,self.rect.y)):
 				self.image = self.image_right
-				self.rect.x = self.rect.x+1
+				self.rect.x = self.rect.x+4
 				self.direction="right"
 			elif (self.count == 0 and randomNumber == 2 and self.validMove(self.rect.x, self.rect.y-1)) or (self.count!=0 and self.direction=="up"and self.validMove(self.rect.x, self.rect.y-1)):
 				self.image = self.image_up
-				self.rect.y = self.rect.y-1
+				self.rect.y = self.rect.y-4
 				self.direction="up"
 			elif (self.count == 0 and randomNumber == 3 and self.validMove(self.rect.x,self.rect.y+1)) or (self.count!=0 and self.direction=="down"and self.validMove(self.rect.x,self.rect.y+1)):
 				self.image = self.image_down
-				self.rect.y = self.rect.y+1
+				self.rect.y = self.rect.y+4
 				self.direction="down"
 			
 				
 		return
 		
 	def tick(self):
-		self.move()
+		if self.automate==1:
+			self.move()
 		return
 		
 class Player(pygame.sprite.Sprite):
@@ -242,6 +261,7 @@ class Player(pygame.sprite.Sprite):
 		self.orientation = "right"
 		self.last_key = "right"
 		self.count = 0
+		self.l = ["pacman", self.rect, self.image]
 
 	def validMove(self, x, y):
 		#lower right half of board start
@@ -340,9 +360,11 @@ class Player(pygame.sprite.Sprite):
 					self.count = 0
 				self.rect = self.rect.move(4, 0)
 				if self.orientation != "right":
+					self.l = ["pacman",self.rect,0]
 					self.image = self.orig_image
 					self.orientation = "right"
 				elif self.count==1:
+					self.l = ["pacman",self.rect,4]
 					self.image = self.image_full
 					self.orientation = "full"
 			
@@ -355,9 +377,11 @@ class Player(pygame.sprite.Sprite):
 					self.count = 0
 				self.rect = self.rect.move(-4,0)
 				if self.orientation != "left":
+					self.l = ["pacman",self.rect,1]
 					self.image = pygame.transform.rotate(self.orig_image, 180)
 					self.orientation = "left"
 				elif self.count==1:
+					self.l = ["pacman",self.rect,4]
 					self.image = self.image_full
 					self.orientation = "full"
 			
@@ -370,9 +394,11 @@ class Player(pygame.sprite.Sprite):
 					self.count = 0
 				self.rect = self.rect.move(0,4)
 				if self.orientation!="down":
+					self.l = ["pacman",self.rect,2]
 					self.image = pygame.transform.rotate(self.orig_image, 270)
 					self.orientation = "down"
 				elif self.count == 1:
+					self.l = ["pacman",self.rect,4]
 					self.image = self.image_full
 					self.orientation = "full"
 			
@@ -390,23 +416,28 @@ class Player(pygame.sprite.Sprite):
 				elif self.count == 1:
 					self.image = self.image_full
 					self.orientation = "full"
+
+		pd = pickle.dumps(self.l)
+		self.gs.handler.commandConnection.transport.write(pd)
 		return
 		
 	def tick(self):
-		print self.rect.x, self.rect.y
+		#print self.rect.x, self.rect.y
 		return
 		
 class GameSpace:
-	def __init__(self):
+	def __init__(self, handler):
 		random.seed()
 		pygame.init()
 		self.stopFlag=0
 		self.myfont = pygame.font.SysFont("monospace", 15)
+
+		self.handler = handler
 		
 
-		pygame.mixer.pre_init(44100, -16, 2, 2048) #initializing sound
-		pygame.mixer.music.load('./sounds/adjSiren.wav')
-		self.waka = pygame.mixer.Sound('./sounds/waka.wav')
+		#pygame.mixer.pre_init(44100, -16, 2, 2048) #initializing sound
+		#pygame.mixer.music.load('./sounds/adjSiren.wav')
+		#self.waka = pygame.mixer.Sound('./sounds/waka.wav')
 		
 		winTitle = pygame.display.set_caption("Paradigms Final Project: Multiplayer Pacman")
 		
@@ -576,11 +607,11 @@ class GameSpace:
 		for item in self.dotList:
 			if self.player.rect.x+5>item.x-15 and self.player.rect.x+5<item.x+15 and self.player.rect.y+5<item.y+15 and self.player.rect.y+5>item.y-15 and item.visible==1:
 				item.visible=0
-				self.waka.play()
+				#self.waka.play()
 				self.score = self.score+10
 
-		if pygame.mixer.music.get_busy()==False:
-			pygame.mixer.music.play()
+		#if pygame.mixer.music.get_busy()==False:
+		#	pygame.mixer.music.play()
 		#self.clock.tick(60)
 		self.blueGhost.tick()
 		for event in pygame.event.get():
@@ -611,7 +642,7 @@ if __name__ == '__main__':
 	handler = ConnectionHandler()
 	commandFactory = CommandFactory(handler)
 	reactor.listenTCP(8678, commandFactory) # command port listening
-	gs = GameSpace()
+	gs = GameSpace(handler)
 	LC = LoopingCall(gs.task)
 	LC.start(1/60)
 	reactor.run()
