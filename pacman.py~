@@ -95,6 +95,8 @@ class blueGhost(pygame.sprite.Sprite):
 		FILE2 = "images/blue_ghost_up.png"
 		FILE3 = "images/blue_ghost_left.png"
 		FILE4 = "images/blue_ghost_right.png"
+		FILE5 = "images/possessed_ghost.png"
+		self.image_possessed = pygame.image.load(FILE5)
 		self.image = pygame.image.load(FILE1) #filled in pacman image
 		self.image = pygame.transform.scale(self.image, (int(30),int(30)))
 		self.image_down = self.image # hold on to original ghost image facing down
@@ -104,6 +106,7 @@ class blueGhost(pygame.sprite.Sprite):
 		self.image_right = pygame.transform.scale(self.image_right, (int(30),int(30)))
 		self.image_up = pygame.transform.scale(self.image_up, (int(30),int(30)))
 		self.image_left = pygame.transform.scale(self.image_left, (int(30),int(30)))
+		self.image_possessed = pygame.transform.scale(self.image_possessed, (int(30),int(30)))
 		
 		self.rect = self.image.get_rect()
 		self.rect.x = 372
@@ -227,19 +230,23 @@ class blueGhost(pygame.sprite.Sprite):
 			self.rect.y= self.rect.y-4
 		else:
 			if (self.count==0 and randomNumber == 0 and self.validMove(self.rect.x-1,self.rect.y)) or (self.count!=0 and self.direction=="left" and self.validMove(self.rect.x-1,self.rect.y)):
-				self.image = self.image_left
+				if self.gs.edible==0:
+					self.image = self.image_left
 				self.rect.x = self.rect.x-4
 				self.direction = "left"
 			elif (self.count==0 and randomNumber == 1 and self.validMove(self.rect.x+1,self.rect.y))or (self.count!=0 and self.direction=="right"and self.validMove(self.rect.x+1,self.rect.y)):
-				self.image = self.image_right
+				if self.gs.edible==0:
+					self.image = self.image_right
 				self.rect.x = self.rect.x+4
 				self.direction="right"
 			elif (self.count == 0 and randomNumber == 2 and self.validMove(self.rect.x, self.rect.y-1)) or (self.count!=0 and self.direction=="up"and self.validMove(self.rect.x, self.rect.y-1)):
-				self.image = self.image_up
+				if self.gs.edible==0:
+					self.image = self.image_up
 				self.rect.y = self.rect.y-4
 				self.direction="up"
 			elif (self.count == 0 and randomNumber == 3 and self.validMove(self.rect.x,self.rect.y+1)) or (self.count!=0 and self.direction=="down"and self.validMove(self.rect.x,self.rect.y+1)):
-				self.image = self.image_down
+				if self.gs.edible==0:
+					self.image = self.image_down
 				self.rect.y = self.rect.y+4
 				self.direction="down"
 			
@@ -247,6 +254,30 @@ class blueGhost(pygame.sprite.Sprite):
 		return
 		
 	def tick(self):
+		if self.gs.edible>120:
+			self.image = self.image_possessed
+		elif self.gs.edible<120 and self.gs.edible>110:
+			self.image = self.image_down
+		elif self.gs.edible<110 and self.gs.edible>100:
+			self.image = self.image_possessed
+		elif self.gs.edible<100 and self.gs.edible>90:
+			self.image = self.image_down
+		elif self.gs.edible<90 and self.gs.edible>80:
+			self.image = self.image_possessed
+		elif self.gs.edible<80 and self.gs.edible>70:
+			self.image = self.image_down
+		elif self.gs.edible<70 and self.gs.edible>60:
+			self.image = self.image_possessed
+		elif self.gs.edible<60 and self.gs.edible>50:
+			self.image = self.image_down
+		elif self.gs.edible<50 and self.gs.edible>40:
+			self.image = self.image_possessed
+		elif self.gs.edible<30 and self.gs.edible>20:
+			self.image = self.image_down
+		elif self.gs.edible<20 and self.gs.edible>10:
+			self.image = self.image_possessed
+		elif self.gs.edible<10 and self.gs.edible!=0:
+			self.image = self.image_down
 		if self.automate==1:
 			self.move()
 		return
@@ -447,8 +478,8 @@ class Player(pygame.sprite.Sprite):
 	def tick(self):
 		if self.gs.edible != 0:
 			self.gs.edible -= 1
-			print self.gs.edible
-		print "Here2"
+		#	print self.gs.edible
+		#print "Here2"
 		#print self.rect.x, self.rect.y
 		return
 		
