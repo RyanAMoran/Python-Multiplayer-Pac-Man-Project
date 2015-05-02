@@ -445,6 +445,10 @@ class Player(pygame.sprite.Sprite):
 		return
 		
 	def tick(self):
+		if self.gs.edible != 0:
+			self.gs.edible -= 1
+		#	print self.gs.edible
+		#print "Here2"
 		#print self.rect.x, self.rect.y
 		return
 		
@@ -453,6 +457,7 @@ class GameSpace:
 		random.seed()
 		pygame.init()
 		self.stopFlag=0
+		self.edible = 0
 		self.myfont = pygame.font.SysFont("monospace", 15)
 
 		self.handler = handler
@@ -638,6 +643,7 @@ class GameSpace:
 		for item in self.big_dotList:
 			if self.player.rect.x+5>item.x-15 and self.player.rect.x+5<item.x+15 and self.player.rect.y+5<item.y+15 and self.player.rect.y+5>item.y-15 and item.visible==1:
 				item.visible=0
+				self.edible = 300 #27 seconds
 				#self.waka.play()
 				self.score = self.score+10
 
@@ -651,7 +657,7 @@ class GameSpace:
 			
 			if (event.type == pygame.QUIT):
 				reactor.stop()
-			self.player.tick()
+		self.player.tick()
 				
 
 		self.screen.fill(self.black)	
