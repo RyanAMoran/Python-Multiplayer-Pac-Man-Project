@@ -1,5 +1,6 @@
 import sys, os, math, time, pygame
 from pygame.locals import *
+import random
 
 class Background(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
@@ -35,6 +36,156 @@ class Dot_Big(pygame.sprite.Sprite):
 		
 		self.rect.x = 143
 		self.rect.y = 82
+
+class blueGhost(pygame.sprite.Sprite):
+		
+	def __init__(self, gs=None):
+		self.gs = gs
+		FILE1 = "images/blue_ghost_down.png"
+		FILE2 = "images/blue_ghost_up.png"
+		FILE3 = "images/blue_ghost_left.png"
+		FILE4 = "images/blue_ghost_right.png"
+		self.image = pygame.image.load(FILE1) #filled in pacman image
+		self.image = pygame.transform.scale(self.image, (int(36),int(36)))
+		self.image_down = self.image # hold on to original ghost image facing down
+		self.image_up = pygame.image.load(FILE2)
+		self.image_right = pygame.image.load(FILE4)
+		self.image_left = pygame.image.load(FILE3)
+		self.image_right = pygame.transform.scale(self.image_right, (int(37),int(37)))
+		self.image_up = pygame.transform.scale(self.image_up, (int(37),int(37)))
+		self.image_left = pygame.transform.scale(self.image_left, (int(37),int(37)))
+		
+		self.rect = self.image.get_rect()
+		self.rect.x = 370
+		self.rect.y = 350
+		self.tempRectX = self.rect.x
+		self.tempRectY = self.rect.y
+		self.direction = "none"
+		self.count = 0
+
+	def validMove(self, x, y):
+		#lower right half of board start
+		if x>636:
+			return 0
+		elif y>633:
+			return 0
+		elif x>536 and y>213 and y<453:
+			return 0
+		elif x>476 and x<532 and y>333 and y<453:
+			return 0
+		elif x> 416 and x<532 and y>453 and y<513:
+			return 0
+		elif (y>453 and y<513 and x>536 and x<636) or (y>481 and y<573 and x>536 and x<596):
+			return 0
+		elif (y>513 and y<573 and x>596):
+			return 0
+		elif (y>573 and y<633 and x>416 and x<636) or (x<532 and x>476 and y>513 and y<609):
+			return 0
+		elif (y<633 and y>537 and x<416 and x>352) or (y>513 and y<572 and x>296 and x<476):
+			return 0
+		elif (x<416 and x>356 and y<513 and y>421) or (y>393 and y<453 and x>296 and x<476):
+			return 0
+		#lower right half of board end
+		#lower left half of board start
+		elif ((x<= 292 and x>= 237) and (y>= 332 and y <=449)):
+			return 0
+		elif ((x>=237 and x<=355) and (y>=454 and y<=512)):
+			return 0
+		elif ((x<=231) and (y>=214 and y<=452)):
+			return 0
+		elif ((x<=131) and (y>=452 and y<= 514)):
+			return 0
+		elif (( x>= 137 and x <=177) and (y>=454 and y<=512)):
+			return 0
+		elif ((x>=177 and x<=231) and (y>=454 and y<=572)):
+			return 0
+		elif ((x <= 171) and (y >= 516 and y<= 572)):
+			return 0
+		elif ((x<= 131) and (y >= 573)):
+			return 0
+		elif ((x >= 237 and x<= 291) and (y>= 516 and y<= 629)):
+			return 0
+		elif ((x>= 137 and x<=351) and (y<=632 and y>=578)):
+			return 0
+		#lower left half of board end
+		#middle of board start
+		elif ((x>=297 and x<=471) and (y>=274 and y<=392)):
+			return 0
+		#middle of board end
+		#start upper left half
+		elif ((x>= 237 and x <= 291) and (y<=326 and y>=154)):
+			return 0
+		elif ((x >=237 and x<= 349) and (y>=216 and y <=268)):
+			return 0
+		elif ( x <= 131):
+			return 0
+		elif ((x>=137 and x <=231) and (y<=208 and y>=154)):
+			return 0
+		elif ((x>=137 and x<=231)and (y<=148 and y>=74)):
+			return 0
+		elif ((x>=237 and x<=351) and (y<=148 and y>=74)):
+			return 0
+		elif (y<=68):
+			return 0
+		elif ((x>=357 and x<= 411) and (y<= 148)):
+			return 0
+		#end upper left half
+		#start upper right half of board
+		elif ((x>=417 and x<=531) and (y<=148 and y>=74)):
+			return 0
+		elif ((x>=537 and x<=631) and (y<= 148 and y>=74)):
+			return 0
+		elif ((x>=537 and x<=631) and (y>=154 and y<=208)):
+			return 0
+		elif ((x>=297 and x<=471) and (y>=154 and y<=212)):
+			return 0
+		elif ((x>=357 and x<=411) and (y<=268 and y>=176)):
+			return 0
+		elif ((x>=477 and x<=531) and (y>=154 and y<=328)):
+			return 0
+		elif ((x>=417 and x<=512) and (y>=214 and y<=268)):
+			return 0
+		#right half board end
+		else:
+			return 1
+		
+				
+	def move(self):
+		randomNumber = random.randrange(0,4)
+		if self.count<100:
+			self.count = self.count+1
+		elif self.count==100:
+			self.count=0
+		if self.rect.x >296 and self.rect.x<380 and self.rect.y < 395 and self.rect.y>272:
+			self.image = self.image_right
+			self.rect.x = self.rect.x+1
+		if self.rect.x>368 and self.rect.x<416 and self.rect.y < 395 and self.rect.y>272:
+			self.image = self.image_up
+			self.rect.y= self.rect.y-1
+		else:
+			if (self.count==0 and randomNumber == 0 and self.validMove(self.rect.x-1,self.rect.y)) or (self.count!=0 and self.direction=="left" and self.validMove(self.rect.x-1,self.rect.y)):
+				self.image = self.image_left
+				self.rect.x = self.rect.x-1
+				self.direction = "left"
+			elif (self.count==0 and randomNumber == 1 and self.validMove(self.rect.x+1,self.rect.y))or (self.count!=0 and self.direction=="right"and self.validMove(self.rect.x+1,self.rect.y)):
+				self.image = self.image_right
+				self.rect.x = self.rect.x+1
+				self.direction="right"
+			elif (self.count == 0 and randomNumber == 2 and self.validMove(self.rect.x, self.rect.y-1)) or (self.count!=0 and self.direction=="up"and self.validMove(self.rect.x, self.rect.y-1)):
+				self.image = self.image_up
+				self.rect.y = self.rect.y-1
+				self.direction="up"
+			elif (self.count == 0 and randomNumber == 3 and self.validMove(self.rect.x,self.rect.y+1)) or (self.count!=0 and self.direction=="down"and self.validMove(self.rect.x,self.rect.y+1)):
+				self.image = self.image_down
+				self.rect.y = self.rect.y+1
+				self.direction="down"
+			
+				
+		return
+		
+	def tick(self):
+		self.move()
+		return
 		
 class Player(pygame.sprite.Sprite):
 		
@@ -205,12 +356,12 @@ class Player(pygame.sprite.Sprite):
 		return
 		
 	def tick(self):
-		#print self.rect.x, self.rect.y
-
+		print self.rect.x, self.rect.y
 		return
 		
 class GameSpace:
 	def main(self):
+		random.seed()
 		pygame.init()
 		self.myfont = pygame.font.SysFont("monospace", 15)
 		
@@ -232,6 +383,7 @@ class GameSpace:
 		self.clock = pygame.time.Clock()
 		
 		self.player = Player(self)
+		self.blueGhost = blueGhost(self)
 		self.background = Background(self)
 		self.dot_small = Dot_Small(self)
 		self.dot_big = Dot_Big(self)
@@ -392,6 +544,7 @@ class GameSpace:
 			if pygame.mixer.music.get_busy()==False:
 				pygame.mixer.music.play()
 			self.clock.tick(60)
+			self.blueGhost.tick()
 			for event in pygame.event.get():
 				if (event.type == KEYDOWN):
 					self.player.move(event.key)
@@ -400,21 +553,21 @@ class GameSpace:
 					sys.exit()
 				self.player.tick()
 				
-				self.screen.fill(self.black)	
-				self.screen.blit(self.background.image, self.background.rect)
 
-				##blitz all visible dots
-				for item in self.dotList:
-					if item.visible==1:
-						self.screen.blit(self.dot_small.image, (item.x, item.y))
-				
+			
+			self.screen.fill(self.black)	
+			self.screen.blit(self.background.image, self.background.rect)	
+			##blitz all visible dots
+			for item in self.dotList:
+				if item.visible==1:
+					self.screen.blit(self.dot_small.image, (item.x, item.y))
 
+			self.screen.blit(self.player.image, self.player.rect)
+			self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
+			self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
+			self.screen.blit(self.scoreLabel, (25, 25))
 				
-				self.screen.blit(self.player.image, self.player.rect)
-				self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
-				self.screen.blit(self.scoreLabel, (25, 25))
-				
-				pygame.display.flip()
+			pygame.display.flip()
 			
 if __name__ == '__main__':
 	gs = GameSpace()
