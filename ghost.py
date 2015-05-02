@@ -234,7 +234,7 @@ class blueGhost(pygame.sprite.Sprite):
 						self.count = 0
 					self.rect = self.rect.move(4, 0)
 					self.l = ["blueGhost", self.rect,0]
-					if self.orientation != "right":
+					if self.orientation != "right" and self.gs.edible==0:
 						self.image = self.image_right
 						self.orientation = "right"
 			
@@ -247,7 +247,7 @@ class blueGhost(pygame.sprite.Sprite):
 						self.count = 0
 					self.rect = self.rect.move(-4,0)
 					self.l = ["blueGhost", self.rect,1]
-					if self.orientation != "left":
+					if self.orientation != "left" and self.gs.edible==0:
 						self.image = self.image_left
 						self.orientation = "left"
 			
@@ -260,7 +260,7 @@ class blueGhost(pygame.sprite.Sprite):
 						self.count = 0
 					self.rect = self.rect.move(0,4)
 					self.l = ["blueGhost", self.rect,2]
-					if self.orientation!="down":
+					if self.orientation!="down" and self.gs.edible==0:
 						self.image = self.image_down
 						self.orientation = "down"
 				
@@ -273,7 +273,7 @@ class blueGhost(pygame.sprite.Sprite):
 						self.count = 0
 					self.rect = self.rect.move(0,-4)
 					self.l = ["blueGhost", self.rect,3]
-					if self.orientation!="up":
+					if self.orientation!="up" and self.gs.edible==0:
 						self.image = self.image_up
 						self.orientation="up"
 		pd = pickle.dumps(self.l)
