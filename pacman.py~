@@ -411,9 +411,11 @@ class Player(pygame.sprite.Sprite):
 					self.count = 0
 				self.rect = self.rect.move(0,-4)
 				if self.orientation!="up":
+					self.l = ["pacman",self.rect,3]
 					self.image = pygame.transform.rotate(self.orig_image, 90)
 					self.orientation="up"
 				elif self.count == 1:
+					self.l = ["pacman",self.rect,4]
 					self.image = self.image_full
 					self.orientation = "full"
 

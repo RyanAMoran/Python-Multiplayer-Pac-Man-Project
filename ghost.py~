@@ -34,7 +34,15 @@ class Command(Protocol):
 			if newList[0]=="pacman":
 				gs.player.rect = newList[1]
 				if newList[2]==0:
-					gs.player.image = gs.player.image
+					gs.player.image = gs.player.image_right
+				elif newList[2]==1:
+					gs.player.image = gs.player.image_left
+				elif newList[2]==2:
+					gs.player.image=gs.player.image_down
+				elif newList[2]==3:
+					gs.player.image=gs.player.image_up
+				elif newList[2]==4:
+					gs.player.image=gs.player.image_full
 
 	def connectionMade(self):
 		self.handler.commandConnection=self
@@ -662,7 +670,7 @@ class GameSpace:
 if __name__ == '__main__':
 	handler = ConnectionHandler()
 	commandFactory = CommandFactory(handler)
-	reactor.connectTCP('student02.cse.nd.edu', 8678, commandFactory) #command port number
+	reactor.connectTCP('localhost', 3200, commandFactory) #command port number
 	gs = GameSpace(handler)
 	LC = LoopingCall(gs.task)
 	LC.start(1/60)
