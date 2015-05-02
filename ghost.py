@@ -209,6 +209,12 @@ class blueGhost(pygame.sprite.Sprite):
 		
 				
 	def move(self, keycode):
+		if (self.rect.x>803):
+			self.rect.x = -36
+		
+		if (self.rect.x < -38):
+			self.rect.x = 800
+			
 		if self.rect.x >296 and self.rect.x<380 and self.rect.y < 395 and self.rect.y>272:
 			self.image = self.image_right
 			self.rect.x = self.rect.x+4

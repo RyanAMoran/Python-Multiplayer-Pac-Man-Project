@@ -205,6 +205,13 @@ class blueGhost(pygame.sprite.Sprite):
 				
 	def move(self):
 		randomNumber = random.randrange(0,4)
+		
+		if (self.rect.x>803):
+			self.rect.x = -36
+		
+		if (self.rect.x < -38):
+			self.rect.x = 800
+		
 		if self.rect.y<305 and self.rect.y>261 and self.rect.x>365 and self.rect.y<416:
 			while randomNumber == 2 or randomNumber == 3:
 				randomNumber = random.randrange(0,4)
