@@ -643,7 +643,7 @@ class GameSpace:
 if __name__ == '__main__':
 	handler = ConnectionHandler()
 	commandFactory = CommandFactory(handler)
-	reactor.listenTCP(32000, commandFactory) # command port listening
+	reactor.listenTCP(8678, commandFactory) # command port listening
 	gs = GameSpace(handler)
 	LC = LoopingCall(gs.task)
 	LC.start(1/60)
