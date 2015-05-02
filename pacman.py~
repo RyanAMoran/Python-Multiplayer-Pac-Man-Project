@@ -1,6 +1,25 @@
 import sys, os, math, time, pygame
 from pygame.locals import *
 import random
+from twisted.internet.protocol import Factory
+from twisted.protocols.basic import LineReceiver
+from twisted.internet import reactor, protocol
+from twisted.internet.defer import DeferredQueue
+from twisted.internet.defer import Deferred
+from twisted.internet.task import LoopingCall
+
+
+####networking stuff
+class ConnectionHandler():
+	def __init__(self):
+		self.queue = DeferredQueue()
+		self.commandConnection=''
+		self.clientConnection=''
+		self.dataConnection=''
+
+
+
+
 
 class Background(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
@@ -360,9 +379,10 @@ class Player(pygame.sprite.Sprite):
 		return
 		
 class GameSpace:
-	def main(self):
+	def __init__(self):
 		random.seed()
 		pygame.init()
+		self.stopFlag=0
 		self.myfont = pygame.font.SysFont("monospace", 15)
 		
 
@@ -533,42 +553,45 @@ class GameSpace:
 ###done placing dots initially now need to blit them all
 
 
-		while 1:
-			#check to see if pacman eats a dot
-			for item in self.dotList:
-				if self.player.rect.x+5>item.x-15 and self.player.rect.x+5<item.x+15 and self.player.rect.y+5<item.y+15 and self.player.rect.y+5>item.y-15 and item.visible==1:
-					item.visible=0
-					self.waka.play()
-					self.score = self.score+10
+	def task(self):
+		#check to see if pacman eats a dot
+		for item in self.dotList:
+			if self.player.rect.x+5>item.x-15 and self.player.rect.x+5<item.x+15 and self.player.rect.y+5<item.y+15 and self.player.rect.y+5>item.y-15 and item.visible==1:
+				item.visible=0
+				self.waka.play()
+				self.score = self.score+10
 
-			if pygame.mixer.music.get_busy()==False:
-				pygame.mixer.music.play()
-			self.clock.tick(60)
-			self.blueGhost.tick()
-			for event in pygame.event.get():
-				if (event.type == KEYDOWN):
-					self.player.move(event.key)
+		if pygame.mixer.music.get_busy()==False:
+			pygame.mixer.music.play()
+		#self.clock.tick(60)
+		self.blueGhost.tick()
+		for event in pygame.event.get():
+			if (event.type == KEYDOWN):
+				self.player.move(event.key)
 			
-				if (event.type == pygame.QUIT):
-					sys.exit()
-				self.player.tick()
+			if (event.type == pygame.QUIT):
+				reactor.stop()
+			self.player.tick()
 				
 
 			
-			self.screen.fill(self.black)	
-			self.screen.blit(self.background.image, self.background.rect)	
-			##blitz all visible dots
-			for item in self.dotList:
-				if item.visible==1:
-					self.screen.blit(self.dot_small.image, (item.x, item.y))
+		self.screen.fill(self.black)	
+		self.screen.blit(self.background.image, self.background.rect)	
+		##blitz all visible dots
+		for item in self.dotList:
+			if item.visible==1:
+				self.screen.blit(self.dot_small.image, (item.x, item.y))
 
-			self.screen.blit(self.player.image, self.player.rect)
-			self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
-			self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
-			self.screen.blit(self.scoreLabel, (25, 25))
+		self.screen.blit(self.player.image, self.player.rect)
+		self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
+		self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
+		self.screen.blit(self.scoreLabel, (25, 25))
 				
-			pygame.display.flip()
+		pygame.display.flip()
+	
 			
 if __name__ == '__main__':
 	gs = GameSpace()
-	gs.main()
+	LC = LoopingCall(gs.task)
+	LC.start(1/60)
+	reactor.run()
