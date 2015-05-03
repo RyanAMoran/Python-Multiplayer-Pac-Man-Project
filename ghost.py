@@ -305,6 +305,8 @@ class blueGhost(pygame.sprite.Sprite):
 			self.image = self.image_possessed
 		elif self.gs.edible<10 and self.gs.edible!=0:
 			self.image = self.image_down
+		if self.gs.edible != 0:
+			self.gs.edible -= 1
 		return
 		
 class Player(pygame.sprite.Sprite):
@@ -687,7 +689,7 @@ class GameSpace:
 			
 			if (event.type == pygame.QUIT):
 				reactor.stop()
-			self.player.tick()
+		self.player.tick()
 				
 
 		self.screen.fill(self.black)	
