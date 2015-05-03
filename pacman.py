@@ -91,6 +91,7 @@ class blueGhost(pygame.sprite.Sprite):
 		
 	def __init__(self, gs=None):
 		self.alive = 1
+		self.num = 6
 		self.gs = gs
 		FILE1 = "images/blue_ghost_down.png"
 		FILE2 = "images/blue_ghost_up.png"
@@ -255,34 +256,52 @@ class blueGhost(pygame.sprite.Sprite):
 		return
 		
 	def tick(self):
-		if self.gs.edible>120:
-			self.image = self.image_possessed
-		elif self.gs.edible<120 and self.gs.edible>110:
-			self.image = self.image_down
-		elif self.gs.edible<110 and self.gs.edible>100:
-			self.image = self.image_possessed
-		elif self.gs.edible<100 and self.gs.edible>90:
-			self.image = self.image_down
-		elif self.gs.edible<90 and self.gs.edible>80:
-			self.image = self.image_possessed
-		elif self.gs.edible<80 and self.gs.edible>70:
-			self.image = self.image_down
-		elif self.gs.edible<70 and self.gs.edible>60:
-			self.image = self.image_possessed
-		elif self.gs.edible<60 and self.gs.edible>50:
-			self.image = self.image_down
-		elif self.gs.edible<50 and self.gs.edible>40:
-			self.image = self.image_possessed
-		elif self.gs.edible<30 and self.gs.edible>20:
-			self.image = self.image_down
-		elif self.gs.edible<20 and self.gs.edible>10:
-			self.image = self.image_possessed
-		elif self.gs.edible<10 and self.gs.edible!=0:
-			self.image = self.image_down
-		if self.automate==1:
-			self.move()
+		if self.alive == 0:
+			#ghost is dead
+			if self.num < 11:
+				#print "Here"
+				if self.num !=7:
+					#print "Here"
+					self.image = pygame.image.load("images/death_%d.png" % self.num)
+					self.image = pygame.transform.scale(self.image, (int(30),int(30)))
+				self.num+=1
+				
+		if self.alive != 0: 
+			if self.gs.edible>120:
+				self.image = self.image_possessed
+			elif self.gs.edible<120 and self.gs.edible>110:
+				self.image = self.image_down
+			elif self.gs.edible<110 and self.gs.edible>100:
+				self.image = self.image_possessed
+			elif self.gs.edible<100 and self.gs.edible>90:
+				self.image = self.image_down
+			elif self.gs.edible<90 and self.gs.edible>80:
+				self.image = self.image_possessed
+			elif self.gs.edible<80 and self.gs.edible>70:
+				self.image = self.image_down
+			elif self.gs.edible<70 and self.gs.edible>60:
+				self.image = self.image_possessed
+			elif self.gs.edible<60 and self.gs.edible>50:
+				self.image = self.image_down
+			elif self.gs.edible<50 and self.gs.edible>40:
+				self.image = self.image_possessed
+			elif self.gs.edible<30 and self.gs.edible>20:
+				self.image = self.image_down
+			elif self.gs.edible<20 and self.gs.edible>10:
+				self.image = self.image_possessed
+			elif self.gs.edible<10 and self.gs.edible!=0:
+				self.image = self.image_down
+			
+			if self.automate==1:
+				self.move()			
+
+			
+
 		if self.gs.edible != 0:
 			self.gs.edible -= 1
+
+
+			
 		return
 		
 class Player(pygame.sprite.Sprite):
@@ -684,11 +703,12 @@ class GameSpace:
 				item.visible=0
 				self.edible = 300 #27 seconds
 				#self.waka.play()
-				self.score = self.score+10
-		if self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible != 0:
+				self.score = self.score+20
+		if self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible != 0 and self.blueGhost.alive ==1:
 			#ghost dies
 			self.blueGhost.alive = 0
-		elif self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible == 0:
+			self.score = self.score+100
+		elif self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible == 0 and self.blueGhost.alive == 1:
 			self.player.alive = 0
 			#pacman dies
 			
@@ -718,7 +738,7 @@ class GameSpace:
 			if item.visible==1:
 				self.screen.blit(self.dot_big.image, (item.x, item.y))
 
-		
+		#if (self.blueGhost.alive != 0):
 		self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
 		self.screen.blit(self.player.image, self.player.rect)
 		self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
