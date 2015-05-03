@@ -95,6 +95,7 @@ class Dot_Big(pygame.sprite.Sprite):
 class blueGhost(pygame.sprite.Sprite):
 		
 	def __init__(self, gs=None):
+		self.alive = 1
 		self.gs = gs
 		FILE1 = "images/blue_ghost_down.png"
 		FILE2 = "images/blue_ghost_up.png"
@@ -312,6 +313,7 @@ class blueGhost(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
 		
 	def __init__(self, gs=None):
+		self.alive = 1
 		self.gs = gs
 		FILE = "images/pacman.png"
 		FILE2 = "images/packman_full.png"
@@ -678,6 +680,13 @@ class GameSpace:
 				self.edible = 300 #27 seconds
 				#self.waka.play()
 				self.score = self.score+10
+				
+		if self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible != 0:
+			#ghost dies
+			self.blueGhost.alive = 0
+		elif self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible == 0:
+			self.Player.alive = 0
+			#pacman dies
 
 		#if pygame.mixer.music.get_busy()==False:
 		#	pygame.mixer.music.play()
