@@ -541,7 +541,7 @@ class GameSpace:
 		self.clock = pygame.time.Clock()
 		
 		self.player = Player(self)
-		self.blueGhost = blueGhost(self)
+		#self.blueGhost = blueGhost(self)
 		self.redGhost = redGhost(self)
 		self.background = Background(self)
 		self.dot_small = Dot_Small(self)

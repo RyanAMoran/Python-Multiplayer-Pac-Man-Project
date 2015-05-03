@@ -27,7 +27,7 @@ class Command(Protocol):
 	def dataReceived(self, data):
 		if self.firstConnected==0:
 			newRedGhostRect = pickle.loads(data)
-			gs.RedGhost.rect = newRedGhostRect
+			gs.redGhost.rect = newRedGhostRect
 			self.firstConnected=1
 		else:
 			newList = pickle.loads(data)
