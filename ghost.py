@@ -313,6 +313,7 @@ class blueGhost(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
 		
 	def __init__(self, gs=None):
+		self.num = 1
 		self.alive = 1
 		self.gs = gs
 		FILE = "images/pacman.png"
@@ -486,7 +487,14 @@ class Player(pygame.sprite.Sprite):
 		return
 		
 	def tick(self):
-		#print self.rect.x, self.rect.y
+		if self.alive == 0:
+			if self.num < 9:
+				self.image = pygame.image.load("images/death_%d.png" % self.num)
+				self.image = pygame.transform.scale(self.image, (int(30),int(30)))
+				self.num+=1
+			else:
+				time.sleep(2) # delays for 2 seconds
+				reactor.stop()
 		return
 		
 class GameSpace:
@@ -713,8 +721,8 @@ class GameSpace:
 				self.screen.blit(self.dot_big.image, (item.x, item.y))
 
 
-		self.screen.blit(self.player.image, self.player.rect)
 		self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
+		self.screen.blit(self.player.image, self.player.rect)
 		self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
 		self.screen.blit(self.scoreLabel, (25, 25))
 				

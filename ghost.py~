@@ -313,6 +313,7 @@ class blueGhost(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
 		
 	def __init__(self, gs=None):
+		self.num = 1
 		self.alive = 1
 		self.gs = gs
 		FILE = "images/pacman.png"
@@ -486,7 +487,14 @@ class Player(pygame.sprite.Sprite):
 		return
 		
 	def tick(self):
-		#print self.rect.x, self.rect.y
+		if self.alive == 0:
+			if self.num < 9:
+				self.image = pygame.image.load("images/death_%d.png" % self.num)
+				self.image = pygame.transform.scale(self.image, (int(30),int(30)))
+				self.num+=1
+			else:
+				time.sleep(2) # delays for 2 seconds
+				reactor.stop()
 		return
 		
 class GameSpace:
@@ -685,7 +693,7 @@ class GameSpace:
 			#ghost dies
 			self.blueGhost.alive = 0
 		elif self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible == 0:
-			self.Player.alive = 0
+			self.player.alive = 0
 			#pacman dies
 
 		#if pygame.mixer.music.get_busy()==False:
