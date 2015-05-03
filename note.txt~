@@ -1,0 +1,23 @@
+Add the rest of the ghosts
+send data from pacman to all ghosts
+
+fix move glitch in the middle 
+
+detect if all dots are gone
+detect if all ghosts are eaten
+
+blitz the single life to screen
+
+--
+
+
+ghost death animation?
+ghosts re-appear?
+player movement more fluid?
+blitz fruit to screen?
+proper pacman start position?
+multiple/extra life?
+intro music?
+intro screen/high score screen?
+more complicated AI movement alogrithm?
+
