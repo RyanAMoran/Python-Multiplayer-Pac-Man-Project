@@ -682,7 +682,7 @@ class GameSpace:
 			#ghost dies
 			self.blueGhost.alive = 0
 		elif self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible == 0:
-			self.Player.alive = 0
+			self.player.alive = 0
 			#pacman dies
 			
 		#if pygame.mixer.music.get_busy()==False:

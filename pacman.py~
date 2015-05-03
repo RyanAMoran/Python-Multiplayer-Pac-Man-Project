@@ -681,7 +681,7 @@ class GameSpace:
 		if self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible != 0:
 			#ghost dies
 			self.blueGhost.alive = 0
-		elif self.player.rect.x+5>self.blueGhost.x-15 and self.player.rect.x+5<self.blueGhost.x+15 and self.player.rect.y+5<self.blueGhost.y+15 and self.player.rect.y+5>self.blueGhost.y-15 and self.edible == 0:
+		elif self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible == 0:
 			self.Player.alive = 0
 			#pacman dies
 			
