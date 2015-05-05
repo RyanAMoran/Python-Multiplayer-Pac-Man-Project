@@ -348,8 +348,8 @@ class Player(pygame.sprite.Sprite):
 		self.image_down = pygame.transform.rotate(self.orig_image, 270)
 		
 		self.rect = self.image.get_rect()
-		self.rect.x = 396
-		self.rect.y = 393
+		self.rect.x = 384
+		self.rect.y = 513
 		self.orientation = "right"
 		self.last_key = "right"
 		self.count = 0
@@ -520,7 +520,7 @@ class GameSpace:
 		random.seed()
 		pygame.init()
 		self.stopFlag=0
-		self.myfont = pygame.font.SysFont("monospace", 15)
+		self.myfont = pygame.font.SysFont("monospace", 25)
 		self.handler = handler
 		self.edible=0
 		self.deathCounter = 0
@@ -757,8 +757,10 @@ class GameSpace:
 				
 		self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
 		self.screen.blit(self.player.image, self.player.rect)
+		self.levelLabel = self.myfont.render("Level 1", 1, (255,255,0))
 		self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
 		self.screen.blit(self.scoreLabel, (25, 25))
+		self.screen.blit(self.levelLabel, (725, 25))
 				
 		pygame.display.flip()
 	

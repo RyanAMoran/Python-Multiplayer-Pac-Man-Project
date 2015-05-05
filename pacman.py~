@@ -571,8 +571,8 @@ class Player(pygame.sprite.Sprite):
 		self.image_down = pygame.transform.rotate(self.orig_image, 270)
 		
 		self.rect = self.image.get_rect()
-		self.rect.x = 396
-		self.rect.y = 393
+		self.rect.x = 389
+		self.rect.y = 513
 		self.orientation = "right"
 		self.last_key = "right"
 		self.count = 0
@@ -942,7 +942,7 @@ class GameSpace:
 			i+=1
 ###done placing dots initially now need to blit them all
 
-
+	
 	def task(self):
 		#check to see if pacman eats a dot
 		for item in self.dotList:
