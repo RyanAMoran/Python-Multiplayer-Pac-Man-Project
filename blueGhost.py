@@ -46,7 +46,7 @@ class Command(Protocol):
 					gs.player.image=gs.player.image_full
 			elif newList[0]=="test":
 				print "cherry received"
-				gs.randomNumber = 50
+				#gs.randomNumber = 50
 
 	def connectionMade(self):
 		self.handler.commandConnection=self
