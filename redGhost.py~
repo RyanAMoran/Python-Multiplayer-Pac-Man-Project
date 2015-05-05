@@ -31,6 +31,7 @@ class Command(Protocol):
 			gs.player.rect = newList[1]
 			gs.dotList = newList[2]
 			gs.big_dotList = newList[3]
+			gs.score = newList[4]
 			self.firstConnected=1
 		else:
 			newList = pickle.loads(data)
@@ -280,6 +281,7 @@ class redGhost(pygame.sprite.Sprite):
 					self.rect = self.rect.move(4, 0)
 					self.l = ["redGhost", self.rect,0]
 					if self.orientation != "right" and self.gs.edible==0:
+						gs.life.image = gs.life.image_right
 						self.image = self.image_right
 						self.orientation = "right"
 			
@@ -293,6 +295,7 @@ class redGhost(pygame.sprite.Sprite):
 					self.rect = self.rect.move(-4,0)
 					self.l = ["redGhost", self.rect,1]
 					if self.orientation != "left" and self.gs.edible==0:
+						gs.life.image = gs.life.image_left
 						self.image = self.image_left
 						self.orientation = "left"
 			
@@ -306,6 +309,7 @@ class redGhost(pygame.sprite.Sprite):
 					self.rect = self.rect.move(0,4)
 					self.l = ["redGhost", self.rect,2]
 					if self.orientation!="down" and self.gs.edible==0:
+						gs.life.image = gs.life.image_down
 						self.image = self.image_down
 						self.orientation = "down"
 				
@@ -319,6 +323,7 @@ class redGhost(pygame.sprite.Sprite):
 					self.rect = self.rect.move(0,-4)
 					self.l = ["redGhost", self.rect,3]
 					if self.orientation!="up" and self.gs.edible==0:
+						gs.life.image = gs.life.image_up
 						self.image = self.image_up
 						self.orientation="up"
 		pd = pickle.dumps(self.l)
