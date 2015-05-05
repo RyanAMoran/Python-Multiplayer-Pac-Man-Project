@@ -636,7 +636,7 @@ class Player(pygame.sprite.Sprite):
 		self.rect.x = 392
 		self.rect.y = 513
 		self.orientation = "full"
-		self.last_key = "right"
+		self.last_key = "left"
 		self.count = 0
 		self.l = ["pacman", self.rect, self.image]
 
@@ -1079,15 +1079,21 @@ class GameSpace:
 		#if pygame.mixer.music.get_busy()==False:
 		#	pygame.mixer.music.play()
 		#self.clock.tick(60)
+		inside = 0
 		self.blueGhost.tick()
 		self.redGhost.tick()
 		for event in pygame.event.get():
 			if (event.type == KEYDOWN ):
+				inside = 1
 				self.player.move(event.key)
 			
 			if (event.type == pygame.QUIT):
 				reactor.stop()
 		self.player.tick()
+		
+		if inside != 1 and pygame.event.get() == []:
+			self.player.move(self.player.last_key)
+			self.player.move(self.player.last_key)
 		
 		
 				

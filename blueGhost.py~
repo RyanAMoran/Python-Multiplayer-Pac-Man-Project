@@ -874,7 +874,7 @@ class GameSpace:
 			
 			#if (self.blueGhost.alive != 0):
 			self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
-			self.screen.blit(self.redGhost.image, self.redGhost.rect)
+		#	self.screen.blit(self.redGhost.image, self.redGhost.rect)
 			self.screen.blit(self.player.image, self.player.rect)
 			self.levelLabel = self.myfont.render("Level: 1", 1, (255,255,0))
 			self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))

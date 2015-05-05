@@ -55,7 +55,6 @@ class CommandFactory(ClientFactory):
 
     def buildProtocol(self, addr):
 	return Command(self.handler)
-
 class Start(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
 		self.gs = gs
@@ -65,16 +64,6 @@ class Start(pygame.sprite.Sprite):
 		self.rect.x = -50
 		self.rect.y = 30
 		self.image = pygame.transform.scale(self.image, (int(900),int(650)))
-class Life(pygame.sprite.Sprite):
-	def __init__(self, gs=None):
-		self.gs = gs
-		FILE = "images/red_ghost_down.png"
-		self.image = pygame.image.load(FILE)
-		self.image = pygame.transform.scale(self.image, (int(30),int(30)))
-		self.rect = self.image.get_rect()
-		
-		self.rect.x = 300
-		self.rect.y = 18
 		
 class Background(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
@@ -110,7 +99,6 @@ class Dot_Big(pygame.sprite.Sprite):
 		
 		self.rect.x = 143
 		self.rect.y = 82
-		
 class Fruit(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
 		self.gs = gs
@@ -121,6 +109,17 @@ class Fruit(pygame.sprite.Sprite):
 		
 		self.rect.x = 396
 		self.rect.y = 393
+
+class Life(pygame.sprite.Sprite):
+	def __init__(self, gs=None):
+		self.gs = gs
+		FILE = "images/red_ghost_down.png"
+		self.image = pygame.image.load(FILE)
+		self.image = pygame.transform.scale(self.image, (int(30),int(30)))
+		self.rect = self.image.get_rect()
+		
+		self.rect.x = 300
+		self.rect.y = 18
 
 class redGhost(pygame.sprite.Sprite):
 		
@@ -262,7 +261,6 @@ class redGhost(pygame.sprite.Sprite):
 			keycode = self.last_key
 		elif (keycode == K_DOWN and self.validMove(self.rect.x, self.rect.y+6) == 0):
 			keycode = self.last_key
-			
 		if (self.rect.x>803):
 			self.rect.x = -36
 		
@@ -400,7 +398,7 @@ class Player(pygame.sprite.Sprite):
 		self.rect.x = 392
 		self.rect.y = 513
 		self.orientation = "right"
-		self.last_key = "right"
+		self.last_key = "left"
 		self.count = 0
 
 	def validMove(self, x, y):
@@ -598,7 +596,6 @@ class Player(pygame.sprite.Sprite):
 		
 		if self.gs.fruit_Counter != 0:
 			self.gs.fruit_Counter -= 1
-		
 		return
 		
 class GameSpace:
@@ -629,7 +626,6 @@ class GameSpace:
 		self.clock = pygame.time.Clock()
 		
 		self.player = Player(self)
-		#self.blueGhost = blueGhost(self)
 		self.redGhost = redGhost(self)
 		self.background = Background(self)
 		self.dot_small = Dot_Small(self)
@@ -808,14 +804,6 @@ class GameSpace:
 				item.visible=0
 				#self.waka.play()
 				self.score = self.score+200
-				
-		#if self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible != 0 and self.blueGhost.alive ==1:
-			#ghost dies
-		#	self.blueGhost.alive = 0
-		#	self.score = self.score+100
-		#elif self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible == 0 and self.blueGhost.alive == 1:
-		#	self.player.alive = 0
-			#pacman dies
 
 		if self.player.rect.x+5>self.redGhost.rect.x-15 and self.player.rect.x+5<self.redGhost.rect.x+15 and self.player.rect.y+5<self.redGhost.rect.y+15 and self.player.rect.y+5>self.redGhost.rect.y-15 and self.edible != 0 and self.redGhost.alive ==1:
 			#ghost dies
