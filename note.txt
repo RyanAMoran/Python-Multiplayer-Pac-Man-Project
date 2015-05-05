@@ -9,17 +9,13 @@ blitz fruit to screen (done)
 proper pacman start position (done)
 
 blitz the single life to screen (done)
-
+player movement more fluid (done)
 --
 
 
-ghost death animation?
-ghosts re-appear?
-player movement more fluid?
 
-
+more complicated AI movement alogrithm?
 multiple/extra life?
 intro music?
 intro screen/high score screen?
-more complicated AI movement alogrithm?
 fix sound?

@@ -81,7 +81,16 @@ class redCommandFactory(Factory):
 	return redCommand(self.handler)
 
 
-
+class Start(pygame.sprite.Sprite):
+	def __init__(self, gs=None):
+		self.gs = gs
+		FILE = "images/start.png"
+		self.image = pygame.image.load(FILE)
+		self.rect = self.image.get_rect()	
+		self.rect.x = -40
+		self.rect.y = 30
+		self.image = pygame.transform.scale(self.image, (int(900),int(650)))
+		
 class Background(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
 		self.gs = gs
@@ -276,9 +285,9 @@ class blueGhost(pygame.sprite.Sprite):
 		if self.rect.y<305 and self.rect.y>261 and self.rect.x>365 and self.rect.y<416:
 			while randomNumber == 2 or randomNumber == 3:
 				randomNumber = random.randrange(0,4)
-		if self.count<100:
+		if self.count<70:
 			self.count = self.count+1
-		elif self.count==100:
+		elif self.count==70:
 			self.count=0
 		if self.rect.x >296 and self.rect.x<380 and self.rect.y < 395 and self.rect.y>272:
 			self.image = self.image_right
@@ -847,6 +856,7 @@ class GameSpace:
 		self.myfont = pygame.font.SysFont("monospace", 25)
 
 		self.handler = handler
+		self.game_screen = 0
 		
 
 		#pygame.mixer.pre_init(44100, -16, 2, 2048) #initializing sound
@@ -874,6 +884,7 @@ class GameSpace:
 		self.dot_big = Dot_Big(self)
 		self.fruit = Fruit(self)
 		self.life = Life(self)
+		self.start = Start(self)
 		self.dotList=[]
 		self.big_dotList=[]
 		self.fruitList= []
@@ -1106,34 +1117,40 @@ class GameSpace:
 			self.fruit_Counter = 500
 			for item in self.fruitList:
 				item.visible = 1
-		for item in self.fruitList:
-			if item.visible==1:
-				self.screen.blit(self.fruit.image, (self.fruit.rect.x, self.fruit.rect.y))
+		if self.game_screen == 0: #start screen
+			self.screen.blit(self.start.image, self.start.rect)
+			pygame.display.flip()
+			time.sleep(5)
+			self.game_screen =1 
+		if self.game_screen == 1:
+			for item in self.fruitList:
+				if item.visible==1:
+					self.screen.blit(self.fruit.image, (self.fruit.rect.x, self.fruit.rect.y))
 				
-		if smallDots_eaten == 1 and bigDots_eaten == 1:
-			time.sleep(2) # delays for 2 seconds
-			reactor.stop()
-			
-		if (self.blueGhost.alive == 0 and self.redGhost.alive == 0):
-			self.deathCounter += 1
-			if self.deathCounter > 2:
-				time.sleep(2)
+			if smallDots_eaten == 1 and bigDots_eaten == 1:
+				time.sleep(2) # delays for 2 seconds
 				reactor.stop()
 			
-		#if (self.blueGhost.alive != 0):
-		self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
-		self.screen.blit(self.redGhost.image, self.redGhost.rect)
-		self.screen.blit(self.player.image, self.player.rect)
-		self.levelLabel = self.myfont.render("Level: 1", 1, (255,255,0))
-		self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
-		self.screen.blit(self.scoreLabel, (25, 25))
-		self.screen.blit(self.levelLabel, (675, 25))
-		self.lifeLabel = self.myfont.render("Lives: ", 1, (255,255,0))
-		self.screen.blit(self.lifeLabel, (240, 25))
-		if self.player.alive != 0:
-			self.screen.blit(self.life.image, self.life.rect)
+			if (self.blueGhost.alive == 0 and self.redGhost.alive == 0):
+				self.deathCounter += 1
+				if self.deathCounter > 2:
+					time.sleep(2)
+					reactor.stop()
+			
+			#if (self.blueGhost.alive != 0):
+			self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
+			self.screen.blit(self.redGhost.image, self.redGhost.rect)
+			self.screen.blit(self.player.image, self.player.rect)
+			self.levelLabel = self.myfont.render("Level: 1", 1, (255,255,0))
+			self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
+			self.screen.blit(self.scoreLabel, (25, 25))
+			self.screen.blit(self.levelLabel, (675, 25))
+			self.lifeLabel = self.myfont.render("Lives: ", 1, (255,255,0))
+			self.screen.blit(self.lifeLabel, (240, 25))
+			if self.player.alive != 0:
+				self.screen.blit(self.life.image, self.life.rect)
 				
-		pygame.display.flip()
+			pygame.display.flip()
 	
 			
 if __name__ == '__main__':

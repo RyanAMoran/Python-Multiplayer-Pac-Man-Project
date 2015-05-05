@@ -56,7 +56,15 @@ class CommandFactory(ClientFactory):
     def buildProtocol(self, addr):
 	return Command(self.handler)
 
-
+class Start(pygame.sprite.Sprite):
+	def __init__(self, gs=None):
+		self.gs = gs
+		FILE = "images/start.png"
+		self.image = pygame.image.load(FILE)
+		self.rect = self.image.get_rect()	
+		self.rect.x = -50
+		self.rect.y = 30
+		self.image = pygame.transform.scale(self.image, (int(900),int(650)))
 class Background(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
 		self.gs = gs
@@ -135,6 +143,7 @@ class blueGhost(pygame.sprite.Sprite):
 		self.image_up = pygame.transform.scale(self.image_up, (int(30),int(30)))
 		self.image_left = pygame.transform.scale(self.image_left, (int(30),int(30)))
 		self.image_possessed = pygame.transform.scale(self.image_possessed, (int(30),int(30)))
+		self.last_key = "right"
 		
 		self.rect = self.image.get_rect()
 		self.rect.x = 372
@@ -623,11 +632,12 @@ class GameSpace:
 		self.dot_big = Dot_Big(self)
 		self.fruit = Fruit(self)
 		self.life = Life(self)
+		self.start = Start(self)
 		self.dotList=[]
 		self.big_dotList=[]
 		self.fruitList= []
 		self.dotCount = 0
-
+		self.game_screen = 0
 		self.score = 0
 		
 
@@ -842,33 +852,40 @@ class GameSpace:
 			self.fruit_Counter = 500
 			for item in self.fruitList:
 				item.visible = 1
-		for item in self.fruitList:
-			if item.visible==1:
-				self.screen.blit(self.fruit.image, (self.fruit.rect.x, self.fruit.rect.y))
+		if self.game_screen == 0: #start screen
+			self.screen.blit(self.start.image, self.start.rect)
+			pygame.display.flip()
+			time.sleep(5)
+			self.game_screen =1 
+		if self.game_screen == 1:
+			for item in self.fruitList:
+				if item.visible==1:
+					self.screen.blit(self.fruit.image, (self.fruit.rect.x, self.fruit.rect.y))
 				
-
-		if smallDots_eaten == 1 and bigDots_eaten == 1:
-			time.sleep(2) # delays for 2 seconds
-			reactor.stop()
-
-		#if (self.blueGhost.alive == 0 and self.redGhost.alive == 0):
+			if smallDots_eaten == 1 and bigDots_eaten == 1:
+				time.sleep(2) # delays for 2 seconds
+				reactor.stop()
+			
+		#	if (self.blueGhost.alive == 0 and self.redGhost.alive == 0):
 		#	self.deathCounter += 1
-		#	if self.deathCounter > 2:
-		#		time.sleep(2)
-		#		reactor.stop()
+		#		if self.deathCounter > 2:
+		#			time.sleep(2)
+		#			reactor.stop()
+			
+			#if (self.blueGhost.alive != 0):
+			self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
+			self.screen.blit(self.redGhost.image, self.redGhost.rect)
+			self.screen.blit(self.player.image, self.player.rect)
+			self.levelLabel = self.myfont.render("Level: 1", 1, (255,255,0))
+			self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
+			self.screen.blit(self.scoreLabel, (25, 25))
+			self.screen.blit(self.levelLabel, (675, 25))
+			self.lifeLabel = self.myfont.render("Lives: ", 1, (255,255,0))
+			self.screen.blit(self.lifeLabel, (240, 25))
+			if self.player.alive != 0:
+				self.screen.blit(self.life.image, self.life.rect)
 				
-		self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
-		self.screen.blit(self.player.image, self.player.rect)
-		self.levelLabel = self.myfont.render("Level: 1", 1, (255,255,0))
-		self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
-		self.screen.blit(self.scoreLabel, (25, 25))
-		self.screen.blit(self.levelLabel, (675, 25))
-		self.lifeLabel = self.myfont.render("Lives: ", 1, (255,255,0))
-		self.screen.blit(self.lifeLabel, (240, 25))
-		if self.blueGhost.alive != 0:
-			self.screen.blit(self.life.image, self.life.rect)
-				
-		pygame.display.flip()
+			pygame.display.flip()
 	
 			
 if __name__ == '__main__':
