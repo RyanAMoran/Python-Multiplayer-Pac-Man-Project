@@ -1119,17 +1119,10 @@ class GameSpace:
 			for item in self.fruitList:
 				item.visible = 0
 			
-		if self.randomNumber == 50:
-			z = ["cherry",self.randomNumber]
-			pd = pickle.dumps(z)
-			if self.blueGhost.automate!=1:
-				print "here"
-				self.handler.commandConnection.transport.write(pd)
-			if self.redGhost.automate!=1:
-				self.handler.redCommandConnection.transport.write(pd)
-			self.fruit_Counter = 500
-			for item in self.fruitList:
-				item.visible = 1
+		z = ["test"]
+		pd = pickle.dumps(z)
+		if self.blueGhost.automate!=1:
+			self.handler.commandConnection.transport.write(pd)
 		if self.game_screen == 0: #start screen
 			self.screen.blit(self.start.image, self.start.rect)
 			pygame.display.flip()
