@@ -842,7 +842,7 @@ class GameSpace:
 				bigDots_eaten = 0
 				self.screen.blit(self.dot_big.image, (item.x, item.y))
 				
-		self.randomNumber = random.randrange(0,1000)
+		#self.randomNumber = random.randrange(0,1000)
 		
 		if (self.fruit_Counter == 0):
 			for item in self.fruitList:

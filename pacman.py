@@ -13,8 +13,8 @@ import cPickle as pickle
 ####networking stuff
 class ConnectionHandler():
 	def __init__(self):
-		self.commandConnection=''
-		self.redCommandConnection=''
+		self.commandConnection='' #blue ghost
+		self.redCommandConnection='' #red ghost
 
 class Command(LineReceiver):
 
@@ -1120,6 +1120,12 @@ class GameSpace:
 				item.visible = 0
 			
 		if self.randomNumber == 50:
+			l = ["cherry", self.randomNumber]
+			pd = pickle.dumps(l)
+			if self.blueGhost.automate!=1:
+				self.handler.commandConnection.transport.write(pd)
+			if self.redGhost.automate!=1:
+				self.handler.redCommandConnection.transport.write(pd)
 			self.fruit_Counter = 500
 			for item in self.fruitList:
 				item.visible = 1

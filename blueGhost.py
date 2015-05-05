@@ -43,6 +43,8 @@ class Command(Protocol):
 					gs.player.image=gs.player.image_up
 				elif newList[2]==4:
 					gs.player.image=gs.player.image_full
+			elif newList[0]=="cherry":
+				gs.randomNumber = newList[1]
 
 	def connectionMade(self):
 		self.handler.commandConnection=self
