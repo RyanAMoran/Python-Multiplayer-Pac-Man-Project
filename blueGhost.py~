@@ -43,6 +43,8 @@ class Command(Protocol):
 					gs.player.image=gs.player.image_up
 				elif newList[2]==4:
 					gs.player.image=gs.player.image_full
+			elif newList[0]=="cherry":
+				gs.randomNumber = newList[1]
 
 	def connectionMade(self):
 		self.handler.commandConnection=self
@@ -396,7 +398,7 @@ class Player(pygame.sprite.Sprite):
 		
 		self.rect = self.image.get_rect()
 		self.rect.x = 392
-		self.rect.y = 513
+		self.rerct.y = 513
 		self.orientation = "right"
 		self.last_key = "left"
 		self.count = 0
@@ -608,6 +610,7 @@ class GameSpace:
 		self.edible=0
 		self.deathCounter = 0
 		self.fruit_Counter = 0
+		self.randomNumber = 0
 
 		#pygame.mixer.pre_init(44100, -16, 2, 2048) #initializing sound
 		#pygame.mixer.music.load('./sounds/adjSiren.wav')

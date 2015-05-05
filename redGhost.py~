@@ -28,7 +28,7 @@ class Command(Protocol):
 		if self.firstConnected==0:
 			newRedGhostRect = pickle.loads(data)
 			gs.redGhost.rect = newRedGhostRect
-			self.firstConnected=1https://github.com/RyanAMoran/NewParadigmsProject/commits/master
+			self.firstConnected=1
 		else:
 			newList = pickle.loads(data)
 			if newList[0]=="pacman":
@@ -43,6 +43,8 @@ class Command(Protocol):
 					gs.player.image=gs.player.image_up
 				elif newList[2]==4:
 					gs.player.image=gs.player.image_full
+			elif newList[0]=="cherry":
+				gs.randomNumber = newList[1]
 
 	def connectionMade(self):
 		self.handler.commandConnection=self
@@ -639,6 +641,7 @@ class GameSpace:
 		self.dotCount = 0
 		self.game_screen = 0
 		self.score = 0
+		self.randomNumber = 0
 		
 
 		#Placing all dots

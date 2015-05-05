@@ -610,6 +610,7 @@ class GameSpace:
 		self.edible=0
 		self.deathCounter = 0
 		self.fruit_Counter = 0
+		self.randomNumber = 0
 
 		#pygame.mixer.pre_init(44100, -16, 2, 2048) #initializing sound
 		#pygame.mixer.music.load('./sounds/adjSiren.wav')
