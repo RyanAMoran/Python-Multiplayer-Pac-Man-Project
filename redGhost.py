@@ -858,7 +858,7 @@ class GameSpace:
 			self.screen.blit(self.levelLabel, (675, 25))
 			self.lifeLabel = self.myfont.render("Lives: ", 1, (255,255,0))
 			self.screen.blit(self.lifeLabel, (240, 25))
-			if self.player.alive != 0:
+			if self.redGhost.alive != 0:
 				self.screen.blit(self.life.image, self.life.rect)
 				
 			pygame.display.flip()

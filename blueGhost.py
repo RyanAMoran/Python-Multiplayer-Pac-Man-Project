@@ -174,7 +174,7 @@ class blueGhost(pygame.sprite.Sprite):
 		elif ((x<= 292 and x>= 237) and (y>= 332 and y <=449)):
 			return 0
 		elif ((x>=237 and x<=355) and (y>=454 and y<=512)):
-			return 0
+			return 0player
 		elif ((x<=131) and (y>=452 and y<= 514)):
 			return 0
 		elif (( x>= 137 and x <=177) and (y>=454 and y<=512)):
@@ -858,7 +858,7 @@ class GameSpace:
 			self.screen.blit(self.levelLabel, (675, 25))
 			self.lifeLabel = self.myfont.render("Lives: ", 1, (255,255,0))
 			self.screen.blit(self.lifeLabel, (240, 25))
-			if self.player.alive != 0:
+			if self.blueGhost.alive != 0:
 				self.screen.blit(self.life.image, self.life.rect)
 				
 			pygame.display.flip()

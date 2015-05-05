@@ -47,12 +47,7 @@ class Command(Protocol):
 					gs.player.image=gs.player.image_up
 				elif newList[2]==4:
 					gs.player.image=gs.player.image_full
-			elif newList[0]=="cherry":
-				print "cherry received"
-				for item in gs.fruitList:
-					item.visible=1
-			elif newList[0]=="fruit_counter":
-				gs.fruit_Counter=newList[1]
+
 		return
 
 	def connectionMade(self):
