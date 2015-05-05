@@ -46,8 +46,7 @@ class Command(Protocol):
 					gs.player.image=gs.player.image_up
 				elif newList[2]==4:
 					gs.player.image=gs.player.image_full
-			elif newList[0]=="cherry":
-				gs.randomNumber = newList[1]
+		
 		return
 
 	def connectionMade(self):
@@ -105,16 +104,7 @@ class Dot_Big(pygame.sprite.Sprite):
 		
 		self.rect.x = 143
 		self.rect.y = 82
-class Fruit(pygame.sprite.Sprite):
-	def __init__(self, gs=None):
-		self.gs = gs
-		FILE = "images/cherry.png"
-		self.image = pygame.image.load(FILE)
-		self.image = pygame.transform.scale(self.image, (int(30),int(30)))
-		self.rect = self.image.get_rect()
-		
-		self.rect.x = 396
-		self.rect.y = 393
+
 
 class Life(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
@@ -599,9 +589,7 @@ class Player(pygame.sprite.Sprite):
 			else:
 				time.sleep(2) # delays for 2 seconds
 				reactor.stop()
-		
-		if self.gs.fruit_Counter != 0:
-			self.gs.fruit_Counter -= 1
+	
 		return
 		
 class GameSpace:
@@ -613,7 +601,7 @@ class GameSpace:
 		self.handler = handler
 		self.edible=0
 		self.deathCounter = 0
-		self.fruit_Counter = 0
+
 
 		#pygame.mixer.pre_init(44100, -16, 2, 2048) #initializing sound
 		#pygame.mixer.music.load('./sounds/adjSiren.wav')
@@ -636,12 +624,12 @@ class GameSpace:
 		self.background = Background(self)
 		self.dot_small = Dot_Small(self)
 		self.dot_big = Dot_Big(self)
-		self.fruit = Fruit(self)
+
 		self.life = Life(self)
 		self.start = Start(self)
 		self.dotList=[]
 		self.big_dotList=[]
-		self.fruitList= []
+
 		self.dotCount = 0
 		self.game_screen = 0
 		self.score = 0
@@ -786,8 +774,7 @@ class GameSpace:
 			self.dotList.append(newdot)
 			i+=1
 
-		newFruit = dot(self.fruit.rect.x, self.fruit.rect.y)
-		self.fruitList.append(newFruit)
+
 ###done placing dots initially now need to blit them all
 
 
@@ -806,11 +793,6 @@ class GameSpace:
 				#self.waka.play()
 				self.score = self.score+20
 				
-		for item in self.fruitList:
-			if self.player.rect.x+5>item.x-15 and self.player.rect.x+5<item.x+15 and self.player.rect.y+5<item.y+15 and self.player.rect.y+5>item.y-15 and item.visible==1:
-				item.visible=0
-				#self.waka.play()
-				self.score = self.score+200
 
 		if self.player.rect.x+5>self.redGhost.rect.x-15 and self.player.rect.x+5<self.redGhost.rect.x+15 and self.player.rect.y+5<self.redGhost.rect.y+15 and self.player.rect.y+5>self.redGhost.rect.y-15 and self.edible != 0 and self.redGhost.alive ==1:
 			#ghost dies
@@ -851,23 +833,16 @@ class GameSpace:
 				
 	#	self.randomNumber = random.randrange(0,1000)
 		
-		if (self.fruit_Counter == 0):
-			for item in self.fruitList:
-				item.visible = 0
+
 			
-		if self.randomNumber == 50:
-			self.fruit_Counter = 500
-			for item in self.fruitList:
-				item.visible = 1
+
 		if self.game_screen == 0: #start screen
 			self.screen.blit(self.start.image, self.start.rect)
 			pygame.display.flip()
 			time.sleep(5)
 			self.game_screen =1 
 		if self.game_screen == 1:
-			for item in self.fruitList:
-				if item.visible==1:
-					self.screen.blit(self.fruit.image, (self.fruit.rect.x, self.fruit.rect.y))
+			
 				
 			if smallDots_eaten == 1 and bigDots_eaten == 1:
 				time.sleep(2) # delays for 2 seconds
