@@ -1076,7 +1076,7 @@ class GameSpace:
 				reactor.stop()
 		self.player.tick()
 		
-		if inside != 1 and pygame.event.get() == []:
+		if inside != 1 and pygame.event.get() == [] and self.player.alive != 0:
 			self.player.move(self.player.last_key)
 			self.player.move(self.player.last_key)
 		
