@@ -28,7 +28,7 @@ class Command(LineReceiver):
 	pd = pickle.dumps(l)
 	self.handler.commandConnection.transport.write(pd)
 
-    def lineReceived(self, data):
+    def dataReceived(self, data):
 	newList = pickle.loads(data)
 	if newList[0]=="blueGhost":
 		gs.blueGhost.rect = newList[1]

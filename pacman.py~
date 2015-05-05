@@ -1098,39 +1098,13 @@ class GameSpace:
 				bigDots_eaten = 0
 				self.screen.blit(self.dot_big.image, (item.x, item.y))
 
-		self.randomNumber = random.randrange(0,500)
-		
-		if (self.fruit_Counter == 0):
-			z = ["fruit_counter",self.fruit_Counter]
-			pd = pickle.dumps(z)
-			if self.blueGhost.automate!=1:
-				self.handler.commandConnection.transport.write(pd)
-			if self.redGhost.automate!=1:
-				self.handler.redCommandConnection.transport.write(pd)
-			for item in self.fruitList:
-				item.visible = 0
-			
-		if self.randomNumber == 50:
-			z = ["cherry",self.randomNumber]
-			pd = pickle.dumps(z)
-			if self.blueGhost.automate!=1:
-				print "here"
-				pd = pickle.dumps(z)
-				self.handler.commandConnection.transport.write(pd)
-			if self.redGhost.automate!=1:
-				self.handler.redCommandConnection.transport.write(pd)
-			self.fruit_Counter = 500
-			for item in self.fruitList:
-				item.visible = 1
+	
 		if self.game_screen == 0: #start screen
 			self.screen.blit(self.start.image, self.start.rect)
 			pygame.display.flip()
 			time.sleep(5)
 			self.game_screen =1 
 		if self.game_screen == 1:
-			for item in self.fruitList:
-				if item.visible==1:
-					self.screen.blit(self.fruit.image, (self.fruit.rect.x, self.fruit.rect.y))
 				
 			if smallDots_eaten == 1 and bigDots_eaten == 1:
 				time.sleep(2) # delays for 2 seconds
