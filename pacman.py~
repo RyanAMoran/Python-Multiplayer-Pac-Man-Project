@@ -1122,9 +1122,9 @@ class GameSpace:
 		if self.randomNumber == 50:
 			l = ["cherry", self.randomNumber]
 			pd = pickle.dumps(l)
-			if self.gs.blueGhost.automate!=1:
+			if self.blueGhost.automate!=1:
 				self.handler.commandConnection.transport.write(pd)
-			if self.gs.redGhost.automate!=1:
+			if self.redGhost.automate!=1:
 				self.handler.redCommandConnection.transport.write(pd)
 			self.fruit_Counter = 500
 			for item in self.fruitList:

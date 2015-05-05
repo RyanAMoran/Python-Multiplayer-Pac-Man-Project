@@ -1123,6 +1123,7 @@ class GameSpace:
 			l = ["cherry", self.randomNumber]
 			pd = pickle.dumps(l)
 			if self.blueGhost.automate!=1:
+				print "here"
 				self.handler.commandConnection.transport.write(pd)
 			if self.redGhost.automate!=1:
 				self.handler.redCommandConnection.transport.write(pd)
