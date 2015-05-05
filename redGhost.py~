@@ -520,9 +520,10 @@ class GameSpace:
 		random.seed()
 		pygame.init()
 		self.stopFlag=0
-		self.myfont = pygame.font.SysFont("monospace", 15)
+		self.myfont = pygame.font.SysFont("monospace", 25)
 		self.handler = handler
 		self.edible=0
+		self.deathCounter = 0
 
 		#pygame.mixer.pre_init(44100, -16, 2, 2048) #initializing sound
 		#pygame.mixer.music.load('./sounds/adjSiren.wav')
@@ -765,8 +766,10 @@ class GameSpace:
 
 		self.screen.blit(self.redGhost.image, self.redGhost.rect)
 		self.screen.blit(self.player.image, self.player.rect)
+		self.levelLabel = self.myfont.render("Level 1", 1, (255,255,0))
 		self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
 		self.screen.blit(self.scoreLabel, (25, 25))
+		self.screen.blit(self.levelLabel, (725, 25))
 				
 		pygame.display.flip()
 	

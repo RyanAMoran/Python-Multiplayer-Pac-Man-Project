@@ -3,7 +3,7 @@ send data from pacman to all ghosts
 
 fix move glitch in the middle 
 
-detect if all dots are gone
+detect if all dots are gone (done)
 detect if all ghosts are eaten
 
 blitz the single life to screen
