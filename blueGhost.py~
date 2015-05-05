@@ -26,8 +26,9 @@ class Command(Protocol):
 
 	def dataReceived(self, data):
 		if self.firstConnected==0:
-			newBlueGhostRect = pickle.loads(data)
-			gs.blueGhost.rect = newBlueGhostRect
+			newList = pickle.loads(data)
+			gs.blueGhost.rect = newList[0]
+			gs.dotList = newList[1]
 			self.firstConnected=1
 		else:
 			newList = pickle.loads(data)
@@ -44,9 +45,13 @@ class Command(Protocol):
 					gs.player.image=gs.player.image_up
 				elif newList[2]==4:
 					gs.player.image=gs.player.image_full
-			elif newList[0]=="test":
+			elif newList[0]=="cherry":
 				print "cherry received"
-				gs.randomNumber = 50
+				for item in gs.fruitList:
+					item.visible=1
+			elif newList[0]=="fruit_counter":
+				gs.fruit_Counter=newList[1]
+		return
 
 	def connectionMade(self):
 		self.handler.commandConnection=self
@@ -866,6 +871,7 @@ class GameSpace:
 			for item in self.fruitList:
 				if item.visible==1:
 					self.screen.blit(self.fruit.image, (self.fruit.rect.x, self.fruit.rect.y))
+					print "got aqui"
 				
 			if smallDots_eaten == 1 and bigDots_eaten == 1:
 				time.sleep(2) # delays for 2 seconds

@@ -26,8 +26,11 @@ class Command(Protocol):
 
 	def dataReceived(self, data):
 		if self.firstConnected==0:
-			newRedGhostRect = pickle.loads(data)
-			gs.redGhost.rect = newRedGhostRect
+			newList = pickle.loads(data)
+			gs.blueGhost.rect = newList[0]
+			gs.player.rect = newList[1]
+			gs.dotList = newList[2]
+			gs.big_dotList = newList[3]
 			self.firstConnected=1
 		else:
 			newList = pickle.loads(data)
@@ -45,6 +48,7 @@ class Command(Protocol):
 					gs.player.image=gs.player.image_full
 			elif newList[0]=="cherry":
 				gs.randomNumber = newList[1]
+		return
 
 	def connectionMade(self):
 		self.handler.commandConnection=self

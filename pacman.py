@@ -24,10 +24,11 @@ class Command(LineReceiver):
     def connectionMade(self):
 	gs.blueGhost.automate=0
 	self.handler.commandConnection = self
-	pd = pickle.dumps(gs.blueGhost.rect)
+	l=[gs.blueGhost.rect,gs.player.rect, gs.dotList,gs.big_dotList]
+	pd = pickle.dumps(l)
 	self.handler.commandConnection.transport.write(pd)
 
-    def dataReceived(self, data):
+    def lineReceived(self, data):
 	newList = pickle.loads(data)
 	if newList[0]=="blueGhost":
 		gs.blueGhost.rect = newList[1]
@@ -39,6 +40,7 @@ class Command(LineReceiver):
 			gs.blueGhost.image=gs.blueGhost.image_down
 		elif newList[2]==3:
 			gs.blueGhost.image=gs.blueGhost.image_up
+	return
 
 class CommandFactory(Factory):
 
@@ -55,8 +57,10 @@ class redCommand(LineReceiver):
 
     def connectionMade(self):
 	gs.redGhost.automate=0
+	gs.redGhost.automate=0
 	self.handler.redCommandConnection = self
-	pd = pickle.dumps(gs.blueGhost.rect)
+	l=[gs.redGhost.rect,gs.player.rect, gs.dotList,gs.big_dotList]
+	pd = pickle.dumps(l)
 	self.handler.redCommandConnection.transport.write(pd)
 
     def dataReceived(self, data):
@@ -729,6 +733,8 @@ class Player(pygame.sprite.Sprite):
 		
 				
 	def move(self, keycode):
+		currentx = self.rect.x
+		currenty = self.rect.y
 		if self.last_key == "right":
 			self.last_key = K_RIGHT
 		elif self.last_key == "left":
@@ -823,12 +829,14 @@ class Player(pygame.sprite.Sprite):
 					self.orientation = "full"
 
 		if self.gs.blueGhost.automate!=1:
-			pd = pickle.dumps(self.l)
-			self.gs.handler.commandConnection.transport.write(pd)
+			if self.rect.x != currentx or self.rect.y!= currenty:
+				pd = pickle.dumps(self.l)
+				self.gs.handler.commandConnection.transport.write(pd)
 
 		if self.gs.redGhost.automate!=1:
-			pd = pickle.dumps(self.l)
-			self.gs.handler.redCommandConnection.transport.write(pd)
+			if self.rect.x != currentx or self.rect.y!= currenty:
+				pd = pickle.dumps(self.l)
+				self.gs.handler.redCommandConnection.transport.write(pd)
 		return
 		
 	def tick(self):
@@ -1113,16 +1121,30 @@ class GameSpace:
 				bigDots_eaten = 0
 				self.screen.blit(self.dot_big.image, (item.x, item.y))
 
-		self.randomNumber = random.randrange(0,1000)
+		self.randomNumber = random.randrange(0,500)
 		
 		if (self.fruit_Counter == 0):
+			z = ["fruit_counter",self.fruit_Counter]
+			pd = pickle.dumps(z)
+			if self.blueGhost.automate!=1:
+				self.handler.commandConnection.transport.write(pd)
+			if self.redGhost.automate!=1:
+				self.handler.redCommandConnection.transport.write(pd)
 			for item in self.fruitList:
 				item.visible = 0
 			
-		z = ["test"]
-		pd2 = pickle.dumps(z)
-		if self.blueGhost.automate!=1:
-			self.handler.commandConnection.transport.write(pd2)
+		if self.randomNumber == 50:
+			z = ["cherry",self.randomNumber]
+			pd = pickle.dumps(z)
+			if self.blueGhost.automate!=1:
+				print "here"
+				pd = pickle.dumps(z)
+				self.handler.commandConnection.transport.write(pd)
+			if self.redGhost.automate!=1:
+				self.handler.redCommandConnection.transport.write(pd)
+			self.fruit_Counter = 500
+			for item in self.fruitList:
+				item.visible = 1
 		if self.game_screen == 0: #start screen
 			self.screen.blit(self.start.image, self.start.rect)
 			pygame.display.flip()
