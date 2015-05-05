@@ -1120,8 +1120,8 @@ class GameSpace:
 				item.visible = 0
 			
 		if self.randomNumber == 50:
-			l = ["cherry", self.randomNumber]
-			pd = pickle.dumps(l)
+			z = ["cherry",self.randomNumber]
+			pd = pickle.dumps(z)
 			if self.blueGhost.automate!=1:
 				print "here"
 				self.handler.commandConnection.transport.write(pd)
