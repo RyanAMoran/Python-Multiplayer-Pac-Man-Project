@@ -31,7 +31,7 @@ class Command(Protocol):
 			self.firstConnected=1
 		else:
 			newList = pickle.loads(data)
-			print newList[1]
+			print newList[0]
 			if newList[0]=="pacman":
 				gs.player.rect = newList[1]
 				if newList[2]==0:
@@ -44,7 +44,7 @@ class Command(Protocol):
 					gs.player.image=gs.player.image_up
 				elif newList[2]==4:
 					gs.player.image=gs.player.image_full
-			elif newList[0]=="cherry":
+			elif newList[0]=="test":
 				print "cherry received"
 				gs.randomNumber = 50
 
