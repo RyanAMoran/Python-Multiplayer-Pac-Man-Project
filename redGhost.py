@@ -136,6 +136,7 @@ class redGhost(pygame.sprite.Sprite):
 		self.image_up = pygame.transform.scale(self.image_up, (int(30),int(30)))
 		self.image_left = pygame.transform.scale(self.image_left, (int(30),int(30)))
 		self.image_possessed = pygame.transform.scale(self.image_possessed, (int(30),int(30)))
+		self.last_key = "right"
 		
 		self.rect = self.image.get_rect()
 		self.rect.x = 356
@@ -236,6 +237,24 @@ class redGhost(pygame.sprite.Sprite):
 		
 				
 	def move(self, keycode):
+		if self.last_key == "right":
+			self.last_key = K_RIGHT
+		elif self.last_key == "left":
+			self.last_key = K_LEFT
+		elif self.last_key == "up":
+			self.last_key = K_UP
+		elif self.last_key == "down":
+			self.last_key = K_DOWN
+			
+		if (keycode == K_RIGHT and self.validMove(self.rect.x+6, self.rect.y) == 0):
+			keycode = self.last_key
+		elif (keycode == K_LEFT and self.validMove(self.rect.x-6, self.rect.y) == 0):
+			keycode = self.last_key
+		elif (keycode == K_UP and self.validMove(self.rect.x, self.rect.y-6) == 0):
+			keycode = self.last_key
+		elif (keycode == K_DOWN and self.validMove(self.rect.x, self.rect.y+6) == 0):
+			keycode = self.last_key
+			
 		if (self.rect.x>803):
 			self.rect.x = -36
 		
@@ -465,6 +484,24 @@ class Player(pygame.sprite.Sprite):
 		
 				
 	def move(self, keycode):
+		if self.last_key == "right":
+			self.last_key = K_RIGHT
+		elif self.last_key == "left":
+			self.last_key = K_LEFT
+		elif self.last_key == "up":
+			self.last_key = K_UP
+		elif self.last_key == "down":
+			self.last_key = K_DOWN
+			
+		if (keycode == K_RIGHT and self.validMove(self.rect.x+6, self.rect.y) == 0):
+			keycode = self.last_key
+		elif (keycode == K_LEFT and self.validMove(self.rect.x-6, self.rect.y) == 0):
+			keycode = self.last_key
+		elif (keycode == K_UP and self.validMove(self.rect.x, self.rect.y-6) == 0):
+			keycode = self.last_key
+		elif (keycode == K_DOWN and self.validMove(self.rect.x, self.rect.y+6) == 0):
+			keycode = self.last_key
+		
 		if (keycode == K_RIGHT):
 			self.last_key = "right"
 			if self.validMove(self.rect.x+4, self.rect.y):
@@ -474,11 +511,17 @@ class Player(pygame.sprite.Sprite):
 					self.count = 0
 				self.rect = self.rect.move(4, 0)
 				if self.orientation != "right":
+					self.l = ["pacman",self.rect,0]
 					self.image = self.orig_image
 					self.orientation = "right"
 				elif self.count==1:
+					self.l = ["pacman",self.rect,4]
 					self.image = self.image_full
 					self.orientation = "full"
+				if (self.rect.x>803):
+					self.rect.x = -36
+					
+					
 			
 		if (keycode == K_LEFT):
 			self.last_key = "left"
@@ -489,11 +532,15 @@ class Player(pygame.sprite.Sprite):
 					self.count = 0
 				self.rect = self.rect.move(-4,0)
 				if self.orientation != "left":
+					self.l = ["pacman",self.rect,1]
 					self.image = pygame.transform.rotate(self.orig_image, 180)
 					self.orientation = "left"
 				elif self.count==1:
+					self.l = ["pacman",self.rect,4]
 					self.image = self.image_full
 					self.orientation = "full"
+				if (self.rect.x < -32):
+					self.rect.x = 800
 			
 		if (keycode == K_DOWN):
 			self.last_key = "down"
@@ -504,14 +551,17 @@ class Player(pygame.sprite.Sprite):
 					self.count = 0
 				self.rect = self.rect.move(0,4)
 				if self.orientation!="down":
+					self.l = ["pacman",self.rect,2]
 					self.image = pygame.transform.rotate(self.orig_image, 270)
 					self.orientation = "down"
 				elif self.count == 1:
+					self.l = ["pacman",self.rect,4]
 					self.image = self.image_full
 					self.orientation = "full"
 			
 		if (keycode == K_UP):
-			self.last_key = "left"
+			self.last_key = "up"
+			
 			if self.validMove(self.rect.x, self.rect.y-4):
 				if self.count<1:
 					self.count = self.count+1
@@ -519,9 +569,11 @@ class Player(pygame.sprite.Sprite):
 					self.count = 0
 				self.rect = self.rect.move(0,-4)
 				if self.orientation!="up":
+					self.l = ["pacman",self.rect,3]
 					self.image = pygame.transform.rotate(self.orig_image, 90)
 					self.orientation="up"
 				elif self.count == 1:
+					self.l = ["pacman",self.rect,4]
 					self.image = self.image_full
 					self.orientation = "full"
 		return
@@ -820,7 +872,7 @@ class GameSpace:
 
 		self.screen.blit(self.redGhost.image, self.redGhost.rect)
 		self.screen.blit(self.player.image, self.player.rect)
-		self.levelLabel = self.myfont.render("Level 1", 1, (255,255,0))
+		self.levelLabel = self.myfont.render("Level: 1", 1, (255,255,0))
 		self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
 		self.screen.blit(self.scoreLabel, (25, 25))
 		self.screen.blit(self.levelLabel, (675, 25))

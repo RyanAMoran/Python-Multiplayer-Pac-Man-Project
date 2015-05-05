@@ -137,7 +137,7 @@ class Life(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		
 		self.rect.x = 300
-		self.rect.y = 15
+		self.rect.y = 18
 		
 class blueGhost(pygame.sprite.Sprite):
 		
@@ -161,6 +161,8 @@ class blueGhost(pygame.sprite.Sprite):
 		self.image_up = pygame.transform.scale(self.image_up, (int(30),int(30)))
 		self.image_left = pygame.transform.scale(self.image_left, (int(30),int(30)))
 		self.image_possessed = pygame.transform.scale(self.image_possessed, (int(30),int(30)))
+
+		self.last_key = "right"
 		
 		self.rect = self.image.get_rect()
 		self.rect.x = 372
@@ -261,6 +263,8 @@ class blueGhost(pygame.sprite.Sprite):
 		
 				
 	def move(self):
+
+	
 		randomNumber = random.randrange(0,4)
 		
 		if (self.rect.x>803):
@@ -379,6 +383,8 @@ class redGhost(pygame.sprite.Sprite):
 		self.image_left = pygame.transform.scale(self.image_left, (int(30),int(30)))
 		self.image_possessed = pygame.transform.scale(self.image_possessed, (int(30),int(30)))
 		
+		self.last_key = "right"
+		
 		self.rect = self.image.get_rect()
 		self.rect.x = 356
 		self.rect.y = 357
@@ -478,7 +484,34 @@ class redGhost(pygame.sprite.Sprite):
 		
 				
 	def move(self):
+		if self.last_key == "right":
+			self.last_key = K_RIGHT
+		elif self.last_key == "left":
+			self.last_key = K_LEFT
+		elif self.last_key == "up":
+			self.last_key = K_UP
+		elif self.last_key == "down":
+			self.last_key = K_DOWN
+		
 		randomNumber = random.randrange(0,4)
+		
+		if randomNumber == 0:
+			keycode =K_LEFT
+		elif randomNumber == 1:
+			keycode = K_RIGHT
+		elif randomNumber == 2:
+			keycode = K_UP
+		else:
+			keycode = K_DOWN
+		if (keycode == K_RIGHT and self.validMove(self.rect.x+6, self.rect.y) == 0):
+			keycode = self.last_key
+		elif (keycode == K_LEFT and self.validMove(self.rect.x-6, self.rect.y) == 0):
+			keycode = self.last_key
+		elif (keycode == K_UP and self.validMove(self.rect.x, self.rect.y-6) == 0):
+			keycode = self.last_key
+		elif (keycode == K_DOWN and self.validMove(self.rect.x, self.rect.y+6) == 0):
+			keycode = self.last_key
+		
 		
 		if (self.rect.x>803):
 			self.rect.x = -36
@@ -489,9 +522,9 @@ class redGhost(pygame.sprite.Sprite):
 		if self.rect.y<305 and self.rect.y>261 and self.rect.x>365 and self.rect.y<416:
 			while randomNumber == 2 or randomNumber == 3:
 				randomNumber = random.randrange(0,4)
-		if self.count<100:
+		if self.count<70:
 			self.count = self.count+1
-		elif self.count==100:
+		elif self.count==70:
 			self.count=0
 		if self.rect.x >296 and self.rect.x<380 and self.rect.y < 395 and self.rect.y>272:
 			self.image = self.image_right
@@ -528,9 +561,7 @@ class redGhost(pygame.sprite.Sprite):
 		if self.alive == 0:
 			#ghost is dead
 			if self.num < 11:
-				#print "Here"
 				if self.num !=7:
-					#print "Here"
 					self.image = pygame.image.load("images/death_%d.png" % self.num)
 					self.image = pygame.transform.scale(self.image, (int(30),int(30)))
 				self.num+=1
@@ -689,6 +720,24 @@ class Player(pygame.sprite.Sprite):
 		
 				
 	def move(self, keycode):
+		if self.last_key == "right":
+			self.last_key = K_RIGHT
+		elif self.last_key == "left":
+			self.last_key = K_LEFT
+		elif self.last_key == "up":
+			self.last_key = K_UP
+		elif self.last_key == "down":
+			self.last_key = K_DOWN
+			
+		if (keycode == K_RIGHT and self.validMove(self.rect.x+6, self.rect.y) == 0):
+			keycode = self.last_key
+		elif (keycode == K_LEFT and self.validMove(self.rect.x-6, self.rect.y) == 0):
+			keycode = self.last_key
+		elif (keycode == K_UP and self.validMove(self.rect.x, self.rect.y-6) == 0):
+			keycode = self.last_key
+		elif (keycode == K_DOWN and self.validMove(self.rect.x, self.rect.y+6) == 0):
+			keycode = self.last_key
+		
 		if (keycode == K_RIGHT):
 			self.last_key = "right"
 			if self.validMove(self.rect.x+4, self.rect.y):
@@ -747,7 +796,8 @@ class Player(pygame.sprite.Sprite):
 					self.orientation = "full"
 			
 		if (keycode == K_UP):
-			self.last_key = "left"
+			self.last_key = "up"
+			
 			if self.validMove(self.rect.x, self.rect.y-4):
 				if self.count<1:
 					self.count = self.count+1
@@ -1021,7 +1071,7 @@ class GameSpace:
 		self.blueGhost.tick()
 		self.redGhost.tick()
 		for event in pygame.event.get():
-			if (event.type == KEYDOWN):
+			if (event.type == KEYDOWN ):
 				self.player.move(event.key)
 			
 			if (event.type == pygame.QUIT):
@@ -1074,7 +1124,7 @@ class GameSpace:
 		self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
 		self.screen.blit(self.redGhost.image, self.redGhost.rect)
 		self.screen.blit(self.player.image, self.player.rect)
-		self.levelLabel = self.myfont.render("Level 1", 1, (255,255,0))
+		self.levelLabel = self.myfont.render("Level: 1", 1, (255,255,0))
 		self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
 		self.screen.blit(self.scoreLabel, (25, 25))
 		self.screen.blit(self.levelLabel, (675, 25))
