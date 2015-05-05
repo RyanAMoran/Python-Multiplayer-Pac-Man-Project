@@ -523,6 +523,7 @@ class GameSpace:
 		self.myfont = pygame.font.SysFont("monospace", 15)
 		self.handler = handler
 		self.edible=0
+		self.deathCounter = 0
 
 		#pygame.mixer.pre_init(44100, -16, 2, 2048) #initializing sound
 		#pygame.mixer.music.load('./sounds/adjSiren.wav')
@@ -756,8 +757,12 @@ class GameSpace:
 		if smallDots_eaten == 1 and bigDots_eaten == 1:
 			time.sleep(2) # delays for 2 seconds
 			reactor.stop()
-			
 
+		if (self.blueGhost.alive == 0 and self.redGhost.alive == 0):
+			self.deathCounter += 1
+			if self.deathCounter > 2:
+				time.sleep(2)
+				reactor.stop()
 
 		self.screen.blit(self.redGhost.image, self.redGhost.rect)
 		self.screen.blit(self.player.image, self.player.rect)

@@ -767,6 +767,7 @@ class GameSpace:
 		pygame.init()
 		self.stopFlag=0
 		self.edible = 0
+		self.deathCounter = 0
 		self.myfont = pygame.font.SysFont("monospace", 15)
 
 		self.handler = handler
@@ -1006,6 +1007,13 @@ class GameSpace:
 		if smallDots_eaten == 1 and bigDots_eaten == 1:
 			time.sleep(2) # delays for 2 seconds
 			reactor.stop()
+			
+		if (self.blueGhost.alive == 0 and self.redGhost.alive == 0):
+			self.deathCounter += 1
+			if self.deathCounter > 2:
+				time.sleep(2)
+				reactor.stop()
+			
 		#if (self.blueGhost.alive != 0):
 		self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
 		self.screen.blit(self.redGhost.image, self.redGhost.rect)

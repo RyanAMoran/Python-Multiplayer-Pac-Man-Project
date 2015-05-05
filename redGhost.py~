@@ -756,8 +756,12 @@ class GameSpace:
 		if smallDots_eaten == 1 and bigDots_eaten == 1:
 			time.sleep(2) # delays for 2 seconds
 			reactor.stop()
-			
 
+		if (self.blueGhost.alive == 0 and self.redGhost.alive == 0):
+			self.deathCounter += 1
+			if self.deathCounter > 2:
+				time.sleep(2)
+				reactor.stop()
 
 		self.screen.blit(self.redGhost.image, self.redGhost.rect)
 		self.screen.blit(self.player.image, self.player.rect)
