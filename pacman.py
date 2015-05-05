@@ -1120,9 +1120,9 @@ class GameSpace:
 				item.visible = 0
 			
 		z = ["test"]
-		pd = pickle.dumps(z)
+		pd2 = pickle.dumps(z)
 		if self.blueGhost.automate!=1:
-			self.handler.commandConnection.transport.write(pd)
+			self.handler.commandConnection.transport.write(pd2)
 		if self.game_screen == 0: #start screen
 			self.screen.blit(self.start.image, self.start.rect)
 			pygame.display.flip()
