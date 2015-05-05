@@ -5,8 +5,10 @@ fix move glitch in the middle
 
 detect if all dots are gone (done)
 detect if all ghosts are eaten (done)
+blitz fruit to screen (done)
+proper pacman start position (done)
 
-blitz the single life to screen
+blitz the single life to screen (done)
 
 --
 
@@ -14,8 +16,8 @@ blitz the single life to screen
 ghost death animation?
 ghosts re-appear?
 player movement more fluid?
-blitz fruit to screen?
-proper pacman start position?
+
+
 multiple/extra life?
 intro music?
 intro screen/high score screen?

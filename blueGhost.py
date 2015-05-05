@@ -102,6 +102,17 @@ class Fruit(pygame.sprite.Sprite):
 		self.rect.x = 396
 		self.rect.y = 393
 		
+class Life(pygame.sprite.Sprite):
+	def __init__(self, gs=None):
+		self.gs = gs
+		FILE = "images/blue_ghost_down.png"
+		self.image = pygame.image.load(FILE)
+		self.image = pygame.transform.scale(self.image, (int(30),int(30)))
+		self.rect = self.image.get_rect()
+		
+		self.rect.x = 300
+		self.rect.y = 18
+		
 class blueGhost(pygame.sprite.Sprite):
 		
 	def __init__(self, gs=None):
@@ -561,6 +572,7 @@ class GameSpace:
 		self.dot_small = Dot_Small(self)
 		self.dot_big = Dot_Big(self)
 		self.fruit = Fruit(self)
+		self.life = Life(self)
 		self.dotList=[]
 		self.big_dotList=[]
 		self.fruitList= []
@@ -789,11 +801,11 @@ class GameSpace:
 			time.sleep(2) # delays for 2 seconds
 			reactor.stop()
 
-		if (self.blueGhost.alive == 0 and self.redGhost.alive == 0):
-			self.deathCounter += 1
-			if self.deathCounter > 2:
-				time.sleep(2)
-				reactor.stop()
+		#if (self.blueGhost.alive == 0 and self.redGhost.alive == 0):
+		#	self.deathCounter += 1
+		#	if self.deathCounter > 2:
+		#		time.sleep(2)
+		#		reactor.stop()
 				
 		self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
 		self.screen.blit(self.player.image, self.player.rect)
@@ -801,6 +813,10 @@ class GameSpace:
 		self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
 		self.screen.blit(self.scoreLabel, (25, 25))
 		self.screen.blit(self.levelLabel, (675, 25))
+		self.lifeLabel = self.myfont.render("Lives: ", 1, (255,255,0))
+		self.screen.blit(self.lifeLabel, (240, 25))
+		if self.blueGhost.alive != 0:
+			self.screen.blit(self.life.image, self.life.rect)
 				
 		pygame.display.flip()
 	
