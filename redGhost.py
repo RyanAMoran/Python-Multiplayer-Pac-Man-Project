@@ -27,13 +27,14 @@ class Command(Protocol):
 	def dataReceived(self, data):
 		if self.firstConnected==0:
 			newList = pickle.loads(data)
-			gs.blueGhost.rect = newList[0]
+			gs.redGhost.rect = newList[0]
 			gs.player.rect = newList[1]
 			gs.dotList = newList[2]
 			gs.big_dotList = newList[3]
 			self.firstConnected=1
 		else:
 			newList = pickle.loads(data)
+			#print newList[0]
 			if newList[0]=="pacman":
 				gs.player.rect = newList[1]
 				if newList[2]==0:
@@ -46,7 +47,7 @@ class Command(Protocol):
 					gs.player.image=gs.player.image_up
 				elif newList[2]==4:
 					gs.player.image=gs.player.image_full
-		
+
 		return
 
 	def connectionMade(self):
@@ -60,6 +61,7 @@ class CommandFactory(ClientFactory):
 
     def buildProtocol(self, addr):
 	return Command(self.handler)
+
 class Start(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
 		self.gs = gs
@@ -69,7 +71,6 @@ class Start(pygame.sprite.Sprite):
 		self.rect.x = -50
 		self.rect.y = 30
 		self.image = pygame.transform.scale(self.image, (int(900),int(650)))
-		
 class Background(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
 		self.gs = gs
@@ -104,8 +105,7 @@ class Dot_Big(pygame.sprite.Sprite):
 		
 		self.rect.x = 143
 		self.rect.y = 82
-
-
+		
 class Life(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
 		self.gs = gs
@@ -116,7 +116,7 @@ class Life(pygame.sprite.Sprite):
 		
 		self.rect.x = 300
 		self.rect.y = 18
-
+		
 class redGhost(pygame.sprite.Sprite):
 		
 	def __init__(self, gs=None):
@@ -142,8 +142,8 @@ class redGhost(pygame.sprite.Sprite):
 		self.last_key = "right"
 		
 		self.rect = self.image.get_rect()
-		self.rect.x = 356
-		self.rect.y = 357
+		self.rect.x = 372
+		self.rect.y = 353
 		self.tempRectX = self.rect.x
 		self.tempRectY = self.rect.y
 		self.direction = "none"
@@ -589,8 +589,7 @@ class Player(pygame.sprite.Sprite):
 			else:
 				time.sleep(2) # delays for 2 seconds
 				reactor.stop()
-	
-		return
+		
 		
 class GameSpace:
 	def __init__(self, handler):
@@ -601,7 +600,7 @@ class GameSpace:
 		self.handler = handler
 		self.edible=0
 		self.deathCounter = 0
-
+		self.randomNumber = 0
 
 		#pygame.mixer.pre_init(44100, -16, 2, 2048) #initializing sound
 		#pygame.mixer.music.load('./sounds/adjSiren.wav')
@@ -624,16 +623,13 @@ class GameSpace:
 		self.background = Background(self)
 		self.dot_small = Dot_Small(self)
 		self.dot_big = Dot_Big(self)
-
 		self.life = Life(self)
 		self.start = Start(self)
 		self.dotList=[]
 		self.big_dotList=[]
-
 		self.dotCount = 0
 		self.game_screen = 0
 		self.score = 0
-		self.randomNumber = 0
 		
 
 		#Placing all dots
@@ -774,7 +770,7 @@ class GameSpace:
 			self.dotList.append(newdot)
 			i+=1
 
-
+	
 ###done placing dots initially now need to blit them all
 
 
@@ -792,8 +788,9 @@ class GameSpace:
 				self.edible = 300 #27 seconds
 				#self.waka.play()
 				self.score = self.score+20
-				
 
+	
+				
 		if self.player.rect.x+5>self.redGhost.rect.x-15 and self.player.rect.x+5<self.redGhost.rect.x+15 and self.player.rect.y+5<self.redGhost.rect.y+15 and self.player.rect.y+5>self.redGhost.rect.y-15 and self.edible != 0 and self.redGhost.alive ==1:
 			#ghost dies
 			self.redGhost.alive = 0
@@ -831,10 +828,7 @@ class GameSpace:
 				bigDots_eaten = 0
 				self.screen.blit(self.dot_big.image, (item.x, item.y))
 				
-	#	self.randomNumber = random.randrange(0,1000)
-		
-
-			
+		#self.randomNumber = random.randrange(0,1000)
 
 		if self.game_screen == 0: #start screen
 			self.screen.blit(self.start.image, self.start.rect)
@@ -842,21 +836,21 @@ class GameSpace:
 			time.sleep(5)
 			self.game_screen =1 
 		if self.game_screen == 1:
-			
+		
 				
 			if smallDots_eaten == 1 and bigDots_eaten == 1:
 				time.sleep(2) # delays for 2 seconds
 				reactor.stop()
 			
-			#if (self.blueGhost.alive == 0 and self.redGhost.alive == 0):
-			#	self.deathCounter += 1
-			#	if self.deathCounter > 2:
-			#		time.sleep(2)
-			#		reactor.stop()
+		#	if (self.redGhost.alive == 0 and self.redGhost.alive == 0):
+		#	self.deathCounter += 1
+		#		if self.deathCounter > 2:
+		#			time.sleep(2)
+		#			reactor.stop()
 			
-			#if (self.blueGhost.alive != 0):
-		#	self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
+			#if (self.redGhost.alive != 0):
 			self.screen.blit(self.redGhost.image, self.redGhost.rect)
+		#	self.screen.blit(self.redGhost.image, self.redGhost.rect)
 			self.screen.blit(self.player.image, self.player.rect)
 			self.levelLabel = self.myfont.render("Level: 1", 1, (255,255,0))
 			self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
