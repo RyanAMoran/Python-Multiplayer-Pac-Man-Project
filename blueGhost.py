@@ -732,15 +732,22 @@ class GameSpace:
 		self.screen.fill(self.black)	
 		self.screen.blit(self.background.image, self.background.rect)	
 		##blitz all visible dots
+		smallDots_eaten = 1
 		for item in self.dotList:
 			if item.visible==1:
+				smallDots_eaten = 0
 				self.screen.blit(self.dot_small.image, (item.x, item.y))
 
+		bigDots_eaten = 1
 		for item in self.big_dotList:
 			if item.visible==1:
+				bigDots_eaten = 0
 				self.screen.blit(self.dot_big.image, (item.x, item.y))
 
-
+		if smallDots_eaten == 1 and bigDots_eaten == 1:
+			time.sleep(2) # delays for 2 seconds
+			reactor.stop()
+			
 		self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
 		self.screen.blit(self.player.image, self.player.rect)
 		self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))

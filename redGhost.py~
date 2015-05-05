@@ -708,12 +708,12 @@ class GameSpace:
 				#self.waka.play()
 				self.score = self.score+10
 				
-		if self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible != 0 and self.blueGhost.alive ==1:
+		#if self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible != 0 and self.blueGhost.alive ==1:
 			#ghost dies
-			self.blueGhost.alive = 0
-			self.score = self.score+100
-		elif self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible == 0 and self.blueGhost.alive == 1:
-			self.player.alive = 0
+		#	self.blueGhost.alive = 0
+		#	self.score = self.score+100
+		#elif self.player.rect.x+5>self.blueGhost.rect.x-15 and self.player.rect.x+5<self.blueGhost.rect.x+15 and self.player.rect.y+5<self.blueGhost.rect.y+15 and self.player.rect.y+5>self.blueGhost.rect.y-15 and self.edible == 0 and self.blueGhost.alive == 1:
+		#	self.player.alive = 0
 			#pacman dies
 
 		if self.player.rect.x+5>self.redGhost.rect.x-15 and self.player.rect.x+5<self.redGhost.rect.x+15 and self.player.rect.y+5<self.redGhost.rect.y+15 and self.player.rect.y+5>self.redGhost.rect.y-15 and self.edible != 0 and self.redGhost.alive ==1:
@@ -741,13 +741,22 @@ class GameSpace:
 		self.screen.fill(self.black)	
 		self.screen.blit(self.background.image, self.background.rect)	
 		##blitz all visible dots
+		smallDots_eaten = 1
 		for item in self.dotList:
 			if item.visible==1:
+				smallDots_eaten = 0
 				self.screen.blit(self.dot_small.image, (item.x, item.y))
 
+		bigDots_eaten = 1
 		for item in self.big_dotList:
 			if item.visible==1:
+				bigDots_eaten = 0
 				self.screen.blit(self.dot_big.image, (item.x, item.y))
+				
+		if smallDots_eaten == 1 and bigDots_eaten == 1:
+			time.sleep(2) # delays for 2 seconds
+			reactor.stop()
+			
 
 
 		self.screen.blit(self.redGhost.image, self.redGhost.rect)
