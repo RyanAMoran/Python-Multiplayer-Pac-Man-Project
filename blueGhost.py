@@ -31,6 +31,7 @@ class Command(Protocol):
 			gs.player.rect = newList[1]
 			gs.dotList = newList[2]
 			gs.big_dotList = newList[3]
+			gs.score = newList[4]
 			self.firstConnected=1
 		else:
 			newList = pickle.loads(data)
@@ -109,9 +110,22 @@ class Dot_Big(pygame.sprite.Sprite):
 class Life(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
 		self.gs = gs
-		FILE = "images/blue_ghost_down.png"
-		self.image = pygame.image.load(FILE)
+		FILE1 = "images/blue_ghost_down.png"
+		FILE2 = "images/blue_ghost_up.png"
+		FILE3 = "images/blue_ghost_left.png"
+		FILE4 = "images/blue_ghost_right.png"
+		FILE5 = "images/possessed_ghost.png"
+		self.image_possessed = pygame.image.load(FILE5)
+		self.image = pygame.image.load(FILE1) #filled in pacman image
 		self.image = pygame.transform.scale(self.image, (int(30),int(30)))
+		self.image_down = self.image # hold on to original ghost image facing down
+		self.image_up = pygame.image.load(FILE2)
+		self.image_right = pygame.image.load(FILE4)
+		self.image_left = pygame.image.load(FILE3)
+		self.image_right = pygame.transform.scale(self.image_right, (int(30),int(30)))
+		self.image_up = pygame.transform.scale(self.image_up, (int(30),int(30)))
+		self.image_left = pygame.transform.scale(self.image_left, (int(30),int(30)))
+		self.image_possessed = pygame.transform.scale(self.image_possessed, (int(30),int(30)))
 		self.rect = self.image.get_rect()
 		
 		self.rect.x = 300
@@ -174,7 +188,7 @@ class blueGhost(pygame.sprite.Sprite):
 		elif ((x<= 292 and x>= 237) and (y>= 332 and y <=449)):
 			return 0
 		elif ((x>=237 and x<=355) and (y>=454 and y<=512)):
-			return 0player
+			return 0
 		elif ((x<=131) and (y>=452 and y<= 514)):
 			return 0
 		elif (( x>= 137 and x <=177) and (y>=454 and y<=512)):
@@ -280,6 +294,7 @@ class blueGhost(pygame.sprite.Sprite):
 					self.rect = self.rect.move(4, 0)
 					self.l = ["blueGhost", self.rect,0]
 					if self.orientation != "right" and self.gs.edible==0:
+						gs.life.image = gs.life.image_right
 						self.image = self.image_right
 						self.orientation = "right"
 			
@@ -293,6 +308,7 @@ class blueGhost(pygame.sprite.Sprite):
 					self.rect = self.rect.move(-4,0)
 					self.l = ["blueGhost", self.rect,1]
 					if self.orientation != "left" and self.gs.edible==0:
+						gs.life.image = gs.life.image_left
 						self.image = self.image_left
 						self.orientation = "left"
 			
@@ -306,6 +322,7 @@ class blueGhost(pygame.sprite.Sprite):
 					self.rect = self.rect.move(0,4)
 					self.l = ["blueGhost", self.rect,2]
 					if self.orientation!="down" and self.gs.edible==0:
+						gs.life.image = gs.life.image_down
 						self.image = self.image_down
 						self.orientation = "down"
 				
@@ -319,6 +336,7 @@ class blueGhost(pygame.sprite.Sprite):
 					self.rect = self.rect.move(0,-4)
 					self.l = ["blueGhost", self.rect,3]
 					if self.orientation!="up" and self.gs.edible==0:
+						gs.life.image = gs.life.image_up
 						self.image = self.image_up
 						self.orientation="up"
 		pd = pickle.dumps(self.l)

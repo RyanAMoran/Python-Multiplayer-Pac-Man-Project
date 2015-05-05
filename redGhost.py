@@ -31,6 +31,7 @@ class Command(Protocol):
 			gs.player.rect = newList[1]
 			gs.dotList = newList[2]
 			gs.big_dotList = newList[3]
+			gs.score = newList[4]
 			self.firstConnected=1
 		else:
 			newList = pickle.loads(data)

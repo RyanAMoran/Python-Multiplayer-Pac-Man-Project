@@ -24,7 +24,7 @@ class Command(LineReceiver):
     def connectionMade(self):
 	gs.blueGhost.automate=0
 	self.handler.commandConnection = self
-	l=[gs.blueGhost.rect,gs.player.rect, gs.dotList,gs.big_dotList]
+	l=[gs.blueGhost.rect,gs.player.rect, gs.dotList,gs.big_dotList, gs.score]
 	pd = pickle.dumps(l)
 	self.handler.commandConnection.transport.write(pd)
 
@@ -59,7 +59,7 @@ class redCommand(LineReceiver):
 	gs.redGhost.automate=0
 	gs.redGhost.automate=0
 	self.handler.redCommandConnection = self
-	l=[gs.redGhost.rect,gs.player.rect, gs.dotList,gs.big_dotList]
+	l=[gs.redGhost.rect,gs.player.rect, gs.dotList,gs.big_dotList, gs.score]
 	pd = pickle.dumps(l)
 	self.handler.redCommandConnection.transport.write(pd)
 
