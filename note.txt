@@ -10,6 +10,8 @@ proper pacman start position (done)
 
 blitz the single life to screen (done)
 player movement more fluid (done)
+
+cherry (bug), dot (bug), score (bug)
 --
 
 

@@ -398,7 +398,7 @@ class Player(pygame.sprite.Sprite):
 		self.rect.x = 392
 		self.rect.y = 513
 		self.orientation = "right"
-		self.last_key = "right"
+		self.last_key = "left"
 		self.count = 0
 
 	def validMove(self, x, y):

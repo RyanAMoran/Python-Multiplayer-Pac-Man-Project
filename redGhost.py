@@ -28,7 +28,7 @@ class Command(Protocol):
 		if self.firstConnected==0:
 			newRedGhostRect = pickle.loads(data)
 			gs.redGhost.rect = newRedGhostRect
-			self.firstConnected=1
+			self.firstConnected=1https://github.com/RyanAMoran/NewParadigmsProject/commits/master
 		else:
 			newList = pickle.loads(data)
 			if newList[0]=="pacman":
@@ -63,7 +63,7 @@ class Start(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()	
 		self.rect.x = -50
 		self.rect.y = 30
-		self.image = pygame.transform.scale(self.image, (int(900),int(650)))
+		self.image = pygame.transform.scalhttps://github.com/RyanAMoran/NewParadigmsProject/commits/mastere(self.image, (int(900),int(650)))
 		
 class Background(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
@@ -842,7 +842,7 @@ class GameSpace:
 				bigDots_eaten = 0
 				self.screen.blit(self.dot_big.image, (item.x, item.y))
 				
-		self.randomNumber = random.randrange(0,1000)
+	#	self.randomNumber = random.randrange(0,1000)
 		
 		if (self.fruit_Counter == 0):
 			for item in self.fruitList:
