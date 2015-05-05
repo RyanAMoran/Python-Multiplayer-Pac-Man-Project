@@ -31,6 +31,7 @@ class Command(Protocol):
 			self.firstConnected=1
 		else:
 			newList = pickle.loads(data)
+			print newList[0]
 			if newList[0]=="pacman":
 				gs.player.rect = newList[1]
 				if newList[2]==0:
