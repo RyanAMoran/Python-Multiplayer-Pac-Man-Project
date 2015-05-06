@@ -1371,6 +1371,14 @@ class Player(pygame.sprite.Sprite):
 			if self.rect.x != currentx or self.rect.y!= currenty:
 				pd = pickle.dumps(self.l)
 				self.gs.handler.redCommandConnection.transport.write(pd)
+		if self.gs.pinkGhost.automate!=1:
+			if self.rect.x != currentx or self.rect.y!= currenty:
+				pd = pickle.dumps(self.l)
+				self.gs.handler.pinkCommandConnection.transport.write(pd)
+		if self.gs.orangeGhost.automate!=1:
+			if self.rect.x != currentx or self.rect.y!= currenty:
+				pd = pickle.dumps(self.l)
+				self.gs.handler.orangeCommandConnection.transport.write(pd)
 		return
 		
 	def tick(self):

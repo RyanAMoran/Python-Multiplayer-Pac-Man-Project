@@ -1704,9 +1704,11 @@ if __name__ == '__main__':
 	commandFactory = CommandFactory(handler)
 	redCommandFactory = redCommandFactory(handler)
 	pinkCommandFactory = pinkCommandFactory(handler)
+	orangeCommandFactory = orangeCommandFactory(handler)
 	reactor.listenTCP(8678, commandFactory) # command port listening for blue ghost
 	reactor.listenTCP(8679, redCommandFactory) #command port listening for red ghost
 	reactor.listenTCP(8680, pinkCommandFactory) #command port listening for pink ghost
+	reactor.listenTCP(8681, orangeCommandFactory) #command port listening for orange ghost
 	gs = GameSpace(handler)
 	LC = LoopingCall(gs.task)
 	LC.start(1/60)
