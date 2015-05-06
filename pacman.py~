@@ -1706,5 +1706,5 @@ if __name__ == '__main__':
 	reactor.listenTCP(8681, orangeCommandFactory) #command port listening for orange ghost
 	gs = GameSpace(handler)#instantiate gamespace
 	LC = LoopingCall(gs.task)#link looping call to gamespace task function seen above
-	LC.start(1/60)#call looping call 60 times per second (gives game 60 frames per second)
-	reactor.run()#run the reactor
+	LC.start(1/60)
+	reactor.run()

@@ -1,4 +1,4 @@
-# File for player connecting to pacman and playing as the pink ghost
+# File for player connecting to pacman and playing as the orange ghost
 # Ryan Moran and Ryan Tick
 # Paradigms Final Project
 
@@ -21,7 +21,10 @@ import cPickle as pickle
 ####networking stuff
 class ConnectionHandler():
 	def __init__(self):
+		self.queue = DeferredQueue()
 		self.commandConnection=''
+		self.clientConnection=''
+		self.dataConnection=''
 
 class Command(Protocol):
 	def __init__(self, handler):
@@ -31,7 +34,7 @@ class Command(Protocol):
 	def dataReceived(self, data):
 		if self.firstConnected==0:
 			newList = pickle.loads(data)
-			gs.pinkGhost.rect = newList[0]
+			gs.orangeGhost.rect = newList[0]
 			gs.player.rect = newList[1]
 			gs.dotList = newList[2]
 			gs.big_dotList = newList[3]
@@ -113,10 +116,10 @@ class Dot_Big(pygame.sprite.Sprite):
 class Life(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
 		self.gs = gs
-		FILE1 = "images/pink_ghost_down.png"
-		FILE2 = "images/pink_ghost_up.png"
-		FILE3 = "images/pink_ghost_left.png"
-		FILE4 = "images/pink_ghost_right.png"
+		FILE1 = "images/orange_ghost_down.png"
+		FILE2 = "images/orange_ghost_up.png"
+		FILE3 = "images/orange_ghost_left.png"
+		FILE4 = "images/orange_ghost_right.png"
 		FILE5 = "images/possessed_ghost.png"
 		self.image_possessed = pygame.image.load(FILE5)
 		self.image = pygame.image.load(FILE1)
@@ -134,16 +137,16 @@ class Life(pygame.sprite.Sprite):
 		self.rect.x = 300
 		self.rect.y = 18
 		
-class pinkGhost(pygame.sprite.Sprite):
+class orangeGhost(pygame.sprite.Sprite):
 		
 	def __init__(self, gs=None):
 		self.alive = 1
 		self.num = 6
 		self.gs = gs
-		FILE1 = "images/pink_ghost_down.png"
-		FILE2 = "images/pink_ghost_up.png"
-		FILE3 = "images/pink_ghost_left.png"
-		FILE4 = "images/pink_ghost_right.png"
+		FILE1 = "images/orange_ghost_down.png"
+		FILE2 = "images/orange_ghost_up.png"
+		FILE3 = "images/orange_ghost_left.png"
+		FILE4 = "images/orange_ghost_right.png"
 		FILE5 = "images/possessed_ghost.png"
 		self.image_possessed = pygame.image.load(FILE5)
 		self.image = pygame.image.load(FILE1)
@@ -166,7 +169,7 @@ class pinkGhost(pygame.sprite.Sprite):
 		self.direction = "none"
 		self.orientation = "down"
 		self.count = 0
-		self.l = ["pinkGhost",self.rect,self.image]
+		self.l = ["orangeGhost",self.rect,self.image]
 
 	def validMove(self, x, y):
 		#lower right half of board start
@@ -295,7 +298,7 @@ class pinkGhost(pygame.sprite.Sprite):
 					else:
 						self.count = 0
 					self.rect = self.rect.move(4, 0)
-					self.l = ["pinkGhost", self.rect,0]
+					self.l = ["orangeGhost", self.rect,0]
 					if self.orientation != "right" and self.gs.edible==0:
 						gs.life.image = gs.life.image_right
 						self.image = self.image_right
@@ -309,7 +312,7 @@ class pinkGhost(pygame.sprite.Sprite):
 					else:
 						self.count = 0
 					self.rect = self.rect.move(-4,0)
-					self.l = ["pinkGhost", self.rect,1]
+					self.l = ["orangeGhost", self.rect,1]
 					if self.orientation != "left" and self.gs.edible==0:
 						gs.life.image = gs.life.image_left
 						self.image = self.image_left
@@ -323,7 +326,7 @@ class pinkGhost(pygame.sprite.Sprite):
 					else:
 						self.count = 0
 					self.rect = self.rect.move(0,4)
-					self.l = ["pinkGhost", self.rect,2]
+					self.l = ["orangeGhost", self.rect,2]
 					if self.orientation!="down" and self.gs.edible==0:
 						gs.life.image = gs.life.image_down
 						self.image = self.image_down
@@ -337,7 +340,7 @@ class pinkGhost(pygame.sprite.Sprite):
 					else:
 						self.count = 0
 					self.rect = self.rect.move(0,-4)
-					self.l = ["pinkGhost", self.rect,3]
+					self.l = ["orangeGhost", self.rect,3]
 					if self.orientation!="up" and self.gs.edible==0:
 						gs.life.image = gs.life.image_up
 						self.image = self.image_up
@@ -380,6 +383,8 @@ class pinkGhost(pygame.sprite.Sprite):
 				self.image = self.image_possessed
 			elif self.gs.edible<10 and self.gs.edible!=0:
 				self.image = self.image_down
+	
+
 			
 
 		if self.gs.edible != 0:
@@ -604,7 +609,7 @@ class Player(pygame.sprite.Sprite):
 				self.image = pygame.image.load("images/death_%d.png" % self.num)
 				self.image = pygame.transform.scale(self.image, (int(30),int(30)))
 				self.num+=1
-			elif (self.num >= 9):
+			elif(self.num>=9):
 				time.sleep(2) # delays for 2 seconds
 				reactor.stop()
 		
@@ -637,7 +642,7 @@ class GameSpace:
 		self.clock = pygame.time.Clock()
 		
 		self.player = Player(self)
-		self.pinkGhost = pinkGhost(self)
+		self.orangeGhost = orangeGhost(self)
 		self.background = Background(self)
 		self.dot_small = Dot_Small(self)
 		self.dot_big = Dot_Big(self)
@@ -809,22 +814,22 @@ class GameSpace:
 
 	
 				
-		if self.player.rect.x+5>self.pinkGhost.rect.x-15 and self.player.rect.x+5<self.pinkGhost.rect.x+15 and self.player.rect.y+5<self.pinkGhost.rect.y+15 and self.player.rect.y+5>self.pinkGhost.rect.y-15 and self.edible != 0 and self.pinkGhost.alive ==1:
+		if self.player.rect.x+5>self.orangeGhost.rect.x-15 and self.player.rect.x+5<self.orangeGhost.rect.x+15 and self.player.rect.y+5<self.orangeGhost.rect.y+15 and self.player.rect.y+5>self.orangeGhost.rect.y-15 and self.edible != 0 and self.orangeGhost.alive ==1:
 			#ghost dies
-			self.pinkGhost.alive = 0
+			self.orangeGhost.alive = 0
 			self.score = self.score+100
-		elif self.player.rect.x+5>self.pinkGhost.rect.x-15 and self.player.rect.x+5<self.pinkGhost.rect.x+15 and self.player.rect.y+5<self.pinkGhost.rect.y+15 and self.player.rect.y+5>self.pinkGhost.rect.y-15 and self.edible == 0 and self.pinkGhost.alive == 1:
+		elif self.player.rect.x+5>self.orangeGhost.rect.x-15 and self.player.rect.x+5<self.orangeGhost.rect.x+15 and self.player.rect.y+5<self.orangeGhost.rect.y+15 and self.player.rect.y+5>self.orangeGhost.rect.y-15 and self.edible == 0 and self.orangeGhost.alive == 1:
 			self.player.alive = 0
 			#pacman dies
 
 		#if pygame.mixer.music.get_busy()==False:
 		#	pygame.mixer.music.play()
 		#self.clock.tick(60)
-		self.pinkGhost.tick()
+		self.orangeGhost.tick()
 		for event in pygame.event.get():
 			if (event.type == KEYDOWN):
-				if self.pinkGhost.alive != 0:
-					self.pinkGhost.move(event.key)
+				if self.orangeGhost.alive != 0:
+					self.orangeGhost.move(event.key)
 			
 			if (event.type == pygame.QUIT):
 				reactor.stop()
@@ -846,7 +851,6 @@ class GameSpace:
 				bigDots_eaten = 0
 				self.screen.blit(self.dot_big.image, (item.x, item.y))
 				
-		#self.randomNumber = random.randrange(0,1000)
 
 		if self.game_screen == 0: #start screen
 			self.screen.blit(self.start.image, self.start.rect)
@@ -860,14 +864,14 @@ class GameSpace:
 				time.sleep(2) # delays for 2 seconds
 				reactor.stop()
 			
-			if (self.pinkGhost.alive == 0):
+			if (self.orangeGhost.alive == 0):
 				self.deathCounter += 1
 				if self.deathCounter > 2:
 					time.sleep(2)
 					reactor.stop()
 			
-			#if (self.pinkGhost.alive != 0):
-			self.screen.blit(self.pinkGhost.image, self.pinkGhost.rect)
+			#if (self.orangeGhost.alive != 0):
+			self.screen.blit(self.orangeGhost.image, self.orangeGhost.rect)
 		#	self.screen.blit(self.redGhost.image, self.redGhost.rect)
 			self.screen.blit(self.player.image, self.player.rect)
 			self.levelLabel = self.myfont.render("Level: 1", 1, (255,255,0))
@@ -876,7 +880,7 @@ class GameSpace:
 			self.screen.blit(self.levelLabel, (675, 25))
 			self.lifeLabel = self.myfont.render("Lives: ", 1, (255,255,0))
 			self.screen.blit(self.lifeLabel, (240, 25))
-			if self.pinkGhost.alive != 0:
+			if self.orangeGhost.alive != 0:
 				self.screen.blit(self.life.image, self.life.rect)
 				
 			pygame.display.flip()
@@ -885,7 +889,7 @@ class GameSpace:
 if __name__ == '__main__':
 	handler = ConnectionHandler()
 	commandFactory = CommandFactory(handler)
-	reactor.connectTCP('student02.cse.nd.edu', 8680, commandFactory) #command port number to connect to on pacman host
+	reactor.connectTCP('student02.cse.nd.edu', 8681, commandFactory) #command port number to connect to on pacman host
 	gs = GameSpace(handler)
 	LC = LoopingCall(gs.task)
 	LC.start(1/60)

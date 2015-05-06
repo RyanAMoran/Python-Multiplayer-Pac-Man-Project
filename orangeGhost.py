@@ -1,3 +1,10 @@
+# File for player connecting to pacman and playing as the orange ghost
+# Ryan Moran and Ryan Tick
+# Paradigms Final Project
+
+
+#***NOTE*** Please see blueGhost.py for majority of comments. Code functionally the same as blueGhost save for images and port connection
+
 import sys, os, math, time, pygame
 from pygame.locals import *
 import random
@@ -14,10 +21,7 @@ import cPickle as pickle
 ####networking stuff
 class ConnectionHandler():
 	def __init__(self):
-		self.queue = DeferredQueue()
 		self.commandConnection=''
-		self.clientConnection=''
-		self.dataConnection=''
 
 class Command(Protocol):
 	def __init__(self, handler):
@@ -35,7 +39,6 @@ class Command(Protocol):
 			self.firstConnected=1
 		else:
 			newList = pickle.loads(data)
-			#print newList[0]
 			if newList[0]=="pacman":
 				gs.player.rect = newList[1]
 				if newList[2]==0:
@@ -116,7 +119,7 @@ class Life(pygame.sprite.Sprite):
 		FILE4 = "images/orange_ghost_right.png"
 		FILE5 = "images/possessed_ghost.png"
 		self.image_possessed = pygame.image.load(FILE5)
-		self.image = pygame.image.load(FILE1) #filled in pacman image
+		self.image = pygame.image.load(FILE1)
 		self.image = pygame.transform.scale(self.image, (int(30),int(30)))
 		self.image_down = self.image # hold on to original ghost image facing down
 		self.image_up = pygame.image.load(FILE2)
@@ -143,7 +146,7 @@ class orangeGhost(pygame.sprite.Sprite):
 		FILE4 = "images/orange_ghost_right.png"
 		FILE5 = "images/possessed_ghost.png"
 		self.image_possessed = pygame.image.load(FILE5)
-		self.image = pygame.image.load(FILE1) #filled in pacman image
+		self.image = pygame.image.load(FILE1)
 		self.image = pygame.transform.scale(self.image, (int(30),int(30)))
 		self.image_down = self.image # hold on to original ghost image facing down
 		self.image_up = pygame.image.load(FILE2)
@@ -347,7 +350,6 @@ class orangeGhost(pygame.sprite.Sprite):
 		if self.alive == 0:
 			#ghost is dead
 			if self.num < 11:
-				#print "Here"
 				if self.num !=7:
 					self.image = pygame.image.load("images/death_%d.png" % self.num)
 					self.image = pygame.transform.scale(self.image, (int(30),int(30)))
@@ -846,7 +848,6 @@ class GameSpace:
 				bigDots_eaten = 0
 				self.screen.blit(self.dot_big.image, (item.x, item.y))
 				
-		#self.randomNumber = random.randrange(0,1000)
 
 		if self.game_screen == 0: #start screen
 			self.screen.blit(self.start.image, self.start.rect)
@@ -885,7 +886,7 @@ class GameSpace:
 if __name__ == '__main__':
 	handler = ConnectionHandler()
 	commandFactory = CommandFactory(handler)
-	reactor.connectTCP('student02.cse.nd.edu', 8681, commandFactory) #command port number
+	reactor.connectTCP('student02.cse.nd.edu', 8681, commandFactory) #command port number to connect to on pacman host
 	gs = GameSpace(handler)
 	LC = LoopingCall(gs.task)
 	LC.start(1/60)

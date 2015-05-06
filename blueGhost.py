@@ -1,3 +1,7 @@
+# File for player connecting to pacman and playing as the blue ghost
+# Ryan Moran and Ryan Tick
+# Paradigms Final Project
+
 import sys, os, math, time, pygame
 from pygame.locals import *
 import random
@@ -14,18 +18,15 @@ import cPickle as pickle
 ####networking stuff
 class ConnectionHandler():
 	def __init__(self):
-		self.queue = DeferredQueue()
 		self.commandConnection=''
-		self.clientConnection=''
-		self.dataConnection=''
 
 class Command(Protocol):
 	def __init__(self, handler):
 		self.firstConnected=0
 		self.handler = handler
 
-	def dataReceived(self, data):
-		if self.firstConnected==0:
+	def dataReceived(self, data): #data received from pacman game host
+		if self.firstConnected==0: #when connection first established
 			newList = pickle.loads(data)
 			gs.blueGhost.rect = newList[0]
 			gs.player.rect = newList[1]
@@ -35,10 +36,9 @@ class Command(Protocol):
 			self.firstConnected=1
 		else:
 			newList = pickle.loads(data)
-			#print newList[0]
 			if newList[0]=="pacman":
-				gs.player.rect = newList[1]
-				if newList[2]==0:
+				gs.player.rect = newList[1] #update pacman's position
+				if newList[2]==0: #update pacmans image
 					gs.player.image = gs.player.image_right
 				elif newList[2]==1:
 					gs.player.image = gs.player.image_left
@@ -52,7 +52,7 @@ class Command(Protocol):
 		return
 
 	def connectionMade(self):
-		self.handler.commandConnection=self
+		self.handler.commandConnection=self #grab connection once established
 			
 
 class CommandFactory(ClientFactory):
@@ -63,6 +63,9 @@ class CommandFactory(ClientFactory):
     def buildProtocol(self, addr):
 	return Command(self.handler)
 
+
+#******Note***** Unless otherwise noted below, code and comments from pacman.py apply below as well
+
 class Start(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
 		self.gs = gs
@@ -72,6 +75,7 @@ class Start(pygame.sprite.Sprite):
 		self.rect.x = -50
 		self.rect.y = 30
 		self.image = pygame.transform.scale(self.image, (int(900),int(650)))
+
 class Background(pygame.sprite.Sprite):
 	def __init__(self, gs=None):
 		self.gs = gs
@@ -143,7 +147,7 @@ class blueGhost(pygame.sprite.Sprite):
 		FILE4 = "images/blue_ghost_right.png"
 		FILE5 = "images/possessed_ghost.png"
 		self.image_possessed = pygame.image.load(FILE5)
-		self.image = pygame.image.load(FILE1) #filled in pacman image
+		self.image = pygame.image.load(FILE1)
 		self.image = pygame.transform.scale(self.image, (int(30),int(30)))
 		self.image_down = self.image # hold on to original ghost image facing down
 		self.image_up = pygame.image.load(FILE2)
@@ -253,7 +257,7 @@ class blueGhost(pygame.sprite.Sprite):
 			return 1
 		
 				
-	def move(self, keycode):
+	def move(self, keycode): #different in this file than in pacman.py; now movement for blue ghost can never be automated. user controlled
 		if self.last_key == "right":
 			self.last_key = K_RIGHT
 		elif self.last_key == "left":
@@ -347,7 +351,6 @@ class blueGhost(pygame.sprite.Sprite):
 		if self.alive == 0:
 			#ghost is dead
 			if self.num < 11:
-				#print "Here"
 				if self.num !=7:
 					self.image = pygame.image.load("images/death_%d.png" % self.num)
 					self.image = pygame.transform.scale(self.image, (int(30),int(30)))
@@ -389,7 +392,7 @@ class blueGhost(pygame.sprite.Sprite):
 			
 		return
 		
-class Player(pygame.sprite.Sprite):
+class Player(pygame.sprite.Sprite): #player actually references the other person playing as pacman. this is not you playing as the blue ghost. the above class blueGhost is you
 		
 	def __init__(self, gs=None):
 		self.num = 1
@@ -501,9 +504,8 @@ class Player(pygame.sprite.Sprite):
 			return 0
 		else:
 			return 1
-		
 				
-	def move(self, keycode):
+	def move(self, keycode): #in this file, player move won't ever actually be called because pacmans movement gets updated via network data
 		if self.last_key == "right":
 			self.last_key = K_RIGHT
 		elif self.last_key == "left":
@@ -846,8 +848,6 @@ class GameSpace:
 				bigDots_eaten = 0
 				self.screen.blit(self.dot_big.image, (item.x, item.y))
 				
-		#self.randomNumber = random.randrange(0,1000)
-
 		if self.game_screen == 0: #start screen
 			self.screen.blit(self.start.image, self.start.rect)
 			pygame.display.flip()
@@ -866,9 +866,7 @@ class GameSpace:
 					time.sleep(2)
 					reactor.stop()
 			
-			#if (self.blueGhost.alive != 0):
 			self.screen.blit(self.blueGhost.image, self.blueGhost.rect)
-		#	self.screen.blit(self.redGhost.image, self.redGhost.rect)
 			self.screen.blit(self.player.image, self.player.rect)
 			self.levelLabel = self.myfont.render("Level: 1", 1, (255,255,0))
 			self.scoreLabel = self.myfont.render("Score: "+str(self.score), 1, (255,255,0))
@@ -885,7 +883,7 @@ class GameSpace:
 if __name__ == '__main__':
 	handler = ConnectionHandler()
 	commandFactory = CommandFactory(handler)
-	reactor.connectTCP('student02.cse.nd.edu', 8678, commandFactory) #command port number
+	reactor.connectTCP('student02.cse.nd.edu', 8678, commandFactory) #command port number to connect to on pacman host
 	gs = GameSpace(handler)
 	LC = LoopingCall(gs.task)
 	LC.start(1/60)
