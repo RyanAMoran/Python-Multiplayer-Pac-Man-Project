@@ -277,7 +277,7 @@ class redGhost(pygame.sprite.Sprite):
 		if (self.rect.x < -38):
 			self.rect.x = 800
 			
-		if self.rect.x >296 and self.rect.x<380 and self.rect.y < 395 and self.rect.y>272:
+		if self.rect.x >298 and self.rect.x<378 and self.rect.y < 385 and self.rect.y>284:
 			self.image = self.image_right
 			self.rect.x = self.rect.x+4
 		if self.rect.x>365 and self.rect.x<416 and self.rect.y < 380 and self.rect.y>272:

@@ -282,7 +282,7 @@ class blueGhost(pygame.sprite.Sprite):
 			self.count = self.count+1
 		elif self.count==70:
 			self.count=0
-		if self.rect.x >296 and self.rect.x<380 and self.rect.y < 395 and self.rect.y>272:
+		if self.rect.x >298 and self.rect.x<378 and self.rect.y < 385 and self.rect.y>284:
 			self.image = self.image_right
 			self.rect.x = self.rect.x+4
 		if self.rect.x>365 and self.rect.x<416 and self.rect.y < 395 and self.rect.y>272:
@@ -528,7 +528,7 @@ class redGhost(pygame.sprite.Sprite):
 			self.count = self.count+1
 		elif self.count==70:
 			self.count=0
-		if self.rect.x >296 and self.rect.x<380 and self.rect.y < 395 and self.rect.y>272:
+		if self.rect.x >298 and self.rect.x<378 and self.rect.y < 385 and self.rect.y>284:
 			self.image = self.image_right
 			self.rect.x = self.rect.x+4
 		if self.rect.x>365 and self.rect.x<416 and self.rect.y < 395 and self.rect.y>272:
