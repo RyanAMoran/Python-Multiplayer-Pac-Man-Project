@@ -263,13 +263,13 @@ class redGhost(pygame.sprite.Sprite):
 		elif self.last_key == "down":
 			self.last_key = K_DOWN
 			
-		if (keycode == K_RIGHT and self.validMove(self.rect.x+6, self.rect.y) == 0):
+		if (keycode == K_RIGHT and self.validMove(self.rect.x+4, self.rect.y) == 0):
 			keycode = self.last_key
-		elif (keycode == K_LEFT and self.validMove(self.rect.x-6, self.rect.y) == 0):
+		elif (keycode == K_LEFT and self.validMove(self.rect.x-4, self.rect.y) == 0):
 			keycode = self.last_key
-		elif (keycode == K_UP and self.validMove(self.rect.x, self.rect.y-6) == 0):
+		elif (keycode == K_UP and self.validMove(self.rect.x, self.rect.y-4) == 0):
 			keycode = self.last_key
-		elif (keycode == K_DOWN and self.validMove(self.rect.x, self.rect.y+6) == 0):
+		elif (keycode == K_DOWN and self.validMove(self.rect.x, self.rect.y+4) == 0):
 			keycode = self.last_key
 		if (self.rect.x>803):
 			self.rect.x = -36
