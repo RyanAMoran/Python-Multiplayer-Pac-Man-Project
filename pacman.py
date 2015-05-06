@@ -459,6 +459,7 @@ class orangeGhost(pygame.sprite.Sprite):
 		self.image_left = pygame.transform.scale(self.image_left, (int(30),int(30)))
 		self.image_possessed = pygame.transform.scale(self.image_possessed, (int(30),int(30)))
 
+
 		self.last_key = "right"
 		
 		self.rect = self.image.get_rect()
@@ -1683,7 +1684,7 @@ class GameSpace:
 				time.sleep(2) # delays for 2 seconds
 				reactor.stop()
 			
-			if (self.blueGhost.alive == 0 and self.redGhost.alive == 0):
+			if (self.blueGhost.alive == 0 and self.redGhost.alive == 0 and self.pinkGhost.alive == 0 and self.orangeGhost.alive == 0):
 				self.deathCounter += 1
 				if self.deathCounter > 2:
 					time.sleep(2)

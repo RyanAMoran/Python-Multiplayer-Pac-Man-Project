@@ -604,7 +604,7 @@ class Player(pygame.sprite.Sprite):
 				self.image = pygame.image.load("images/death_%d.png" % self.num)
 				self.image = pygame.transform.scale(self.image, (int(30),int(30)))
 				self.num+=1
-			else:
+			elif (self.num >= 9):
 				time.sleep(2) # delays for 2 seconds
 				reactor.stop()
 		
@@ -860,11 +860,11 @@ class GameSpace:
 				time.sleep(2) # delays for 2 seconds
 				reactor.stop()
 			
-		#	if (self.pinkGhost.alive == 0 and self.redGhost.alive == 0):
-		#	self.deathCounter += 1
-		#		if self.deathCounter > 2:
-		#			time.sleep(2)
-		#			reactor.stop()
+			if (self.pinkGhost.alive == 0):
+				self.deathCounter += 1
+				if self.deathCounter > 2:
+					time.sleep(2)
+					reactor.stop()
 			
 			#if (self.pinkGhost.alive != 0):
 			self.screen.blit(self.pinkGhost.image, self.pinkGhost.rect)
